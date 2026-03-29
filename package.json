@@ -1,6 +1,6 @@
 {
   "name": "oregon-trail-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A retro CLI version of the classic Oregon Trail game with ASCII art, animations, and interactive mini-games",
   "main": "src/index.js",
   "bin": {
