@@ -86,8 +86,11 @@ class GameEngine {
 
   showStore() {
     this.state = 'store';
-    const s = new StoreScreen(this.screen, this.gs, () => {
-      this.startTravel();
+    const s = new StoreScreen(this.screen, {
+      gameState: this.gs,
+      onComplete: () => {
+        this.startTravel();
+      },
     });
     this._show(s);
   }

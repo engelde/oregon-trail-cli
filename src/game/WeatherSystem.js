@@ -128,7 +128,7 @@ class WeatherSystem {
       snow: 0.5,
       blizzard: 0.0,
     };
-    return modifiers[this.currentWeather] || 1.0;
+    return modifiers[this.currentWeather] ?? 1.0;
   }
 
   /**
