@@ -4,8 +4,8 @@
   "description": "A retro CLI version of the classic Oregon Trail game with ASCII art, animations, and interactive mini-games",
   "main": "src/index.js",
   "bin": {
-    "oregon-trail": "./bin/oregon-trail.js",
-    "oregon-trail-cli": "./bin/oregon-trail.js"
+    "oregon-trail": "bin/oregon-trail.js",
+    "oregon-trail-cli": "bin/oregon-trail.js"
   },
   "scripts": {
     "start": "node bin/oregon-trail.js",
@@ -28,7 +28,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/engelde/oregon-trail-cli.git"
+    "url": "git+https://github.com/engelde/oregon-trail-cli.git"
   },
   "homepage": "https://github.com/engelde/oregon-trail-cli#readme",
   "bugs": {

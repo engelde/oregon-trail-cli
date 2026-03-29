@@ -83,18 +83,24 @@ function showDialog(screen, opts) {
       if (num >= 1 && num <= choices.length) {
         selectedIndex = num - 1;
         teardown();
-        if (callback) callback(selectedIndex, choices[selectedIndex]);
+        // Defer callback so same-tick key handlers see dialog as still active
+        if (callback) {
+          const idx = selectedIndex;
+          process.nextTick(() => callback(idx, choices[idx]));
+        }
         return;
       }
     }
 
     if (key.name === 'return' || key.name === 'enter') {
       teardown();
+      // Defer callback so same-tick key handlers see dialog as still active
       if (callback) {
         if (hasChoices) {
-          callback(selectedIndex, choices[selectedIndex]);
+          const idx = selectedIndex;
+          process.nextTick(() => callback(idx, choices[idx]));
         } else {
-          callback(null);
+          process.nextTick(() => callback(null));
         }
       }
       return;
@@ -102,7 +108,7 @@ function showDialog(screen, opts) {
 
     if (key.name === 'escape') {
       teardown();
-      if (callback) callback(null);
+      if (callback) process.nextTick(() => callback(null));
     }
   }
 
