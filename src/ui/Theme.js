@@ -5,7 +5,7 @@ const colors = {
   danger: 'red',
   water: 'blue',
   text: 'white',
-  bg: 'black',
+  bg: 'default',
   muted: 'gray',
   success: 'bright-green',
   highlight: 'cyan',

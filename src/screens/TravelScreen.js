@@ -398,7 +398,7 @@ class TravelScreen {
       width: '100%',
       height: terrainHeight,
       tags: true,
-      style: { fg: 'white', bg: 'black' },
+      style: { fg: 'white', bg: 'default' },
     });
     this.addWidget(this.terrainBox);
 

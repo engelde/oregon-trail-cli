@@ -118,7 +118,7 @@ class RiverMiniGame {
       width: '100%',
       height: this.height,
       tags: true,
-      style: { fg: 'white', bg: 'black' },
+      style: { fg: 'white', bg: 'default' },
     });
     this.addWidget(this.gameArea);
 
@@ -132,7 +132,7 @@ class RiverMiniGame {
       style: {
         border: { fg: colors.muted },
         fg: 'white',
-        bg: 'black',
+        bg: 'default',
       },
       padding: { left: 1, right: 1 },
     });

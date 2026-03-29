@@ -217,7 +217,7 @@ class GameEngine {
       height: '70%',
       tags: true,
       border: { type: 'line' },
-      style: { border: { fg: 'red' }, fg: 'white', bg: 'black' },
+      style: { border: { fg: 'red' }, fg: 'white', bg: 'default' },
       content: [
         '',
         miscArt.gameOver || '  {bold}{red-fg}GAME OVER{/red-fg}{/bold}',

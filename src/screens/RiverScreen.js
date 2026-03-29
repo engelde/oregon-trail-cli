@@ -10,7 +10,7 @@ try {
     danger: 'red',
     water: 'blue',
     text: 'white',
-    bg: 'black',
+    bg: 'default',
     muted: 'gray',
     highlight: 'cyan',
   };
