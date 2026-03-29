@@ -27,8 +27,9 @@ const screenManager = new ScreenManager(screen);
 const gameState = new GameState();
 const engine = new GameEngine(screen, screenManager, gameState);
 
-// Global exit keys
+// Global exit keys (disabled during text input)
 screen.key(['q', 'C-c'], () => {
+  if (screen.focused && screen.focused.type === 'textbox') return;
   engine.cleanup();
   screen.destroy();
   process.exit(0);

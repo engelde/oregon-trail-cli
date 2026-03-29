@@ -246,7 +246,6 @@ class FortScreen {
       border: { type: 'line' },
       label: ` ${bold(this.landmark.name)} `,
       tags: true,
-      shadow: true,
       style: {
         border: { fg: colors.highlight },
         fg: colors.text,
@@ -284,7 +283,6 @@ class FortScreen {
       border: { type: 'line' },
       label: ` ${bold('Buy Supplies')} `,
       tags: true,
-      shadow: true,
       style: {
         border: { fg: colors.secondary },
         fg: colors.text,
@@ -389,7 +387,6 @@ class FortScreen {
       border: { type: 'line' },
       label: ` ${bold('Rest at the Fort')} `,
       tags: true,
-      shadow: true,
       style: {
         border: { fg: colors.highlight },
         fg: colors.text,
@@ -453,7 +450,6 @@ class FortScreen {
       border: { type: 'line' },
       label: ` ${bold('Rest Complete')} `,
       tags: true,
-      shadow: true,
       style: {
         border: { fg: colors.primary },
         fg: colors.text,
@@ -500,17 +496,23 @@ class FortScreen {
       content = lines.join('\n');
     }
 
+    const sh = this.screen.height || 24;
+    const boxHeight = Math.min(14, Math.floor(sh * 0.45));
+
     const box = blessed.box({
       parent: this.menuArea,
       top: 0,
       left: 'center',
       width: 64,
-      height: 14,
+      height: boxHeight,
       border: { type: 'line' },
       label: ` ${bold('Talk to People')} `,
       tags: true,
-      shadow: true,
       scrollable: true,
+      alwaysScroll: true,
+      keys: true,
+      vi: true,
+      mouse: true,
       style: {
         border: { fg: colors.highlight },
         fg: colors.text,
@@ -557,7 +559,6 @@ class FortScreen {
       border: { type: 'line' },
       label: ` ${bold('Trade Offer')} `,
       tags: true,
-      shadow: true,
       style: {
         border: { fg: colors.secondary },
         fg: colors.text,
@@ -593,7 +594,6 @@ class FortScreen {
           height: 6,
           border: { type: 'line' },
           tags: true,
-          shadow: true,
           style: {
             border: { fg: colors.primary },
             fg: colors.text,

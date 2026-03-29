@@ -16,11 +16,14 @@ function showDialog(screen, opts) {
   const { title, message, choices, callback } = opts;
   const hasChoices = Array.isArray(choices) && choices.length > 0;
 
-  // Size the box to content
+  // Size the box to content, capping at terminal height
   const msgLines = (message || '').split('\n').length;
   const choiceLines = hasChoices ? choices.length + 1 : 0; // +1 for blank separator
   const contentHeight = msgLines + choiceLines + 2; // padding
-  const height = contentHeight + 4; // border + top/bottom padding
+  const idealHeight = contentHeight + 4; // border + top/bottom padding
+  const maxHeight = Math.max(10, (screen.height || 24) - 2);
+  const height = Math.min(idealHeight, maxHeight);
+  const needsScroll = idealHeight > maxHeight;
   const width = Math.min(60, Math.floor(screen.width * 0.8));
 
   const box = blessed.box({
@@ -30,6 +33,12 @@ function showDialog(screen, opts) {
     width,
     height,
     label: title ? ` ${title} ` : undefined,
+    scrollable: needsScroll,
+    alwaysScroll: needsScroll,
+    scrollbar: needsScroll ? { style: { bg: colors.primary } } : undefined,
+    keys: needsScroll,
+    vi: needsScroll,
+    mouse: needsScroll,
     ...boxStyles.dialog,
   });
 

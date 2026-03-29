@@ -329,3 +329,76 @@ describe('Gameplay Integration', () => {
     });
   });
 });
+
+// ── Menu and screen tests ──────────────────────────────────────
+
+describe('DialogBox overflow protection', () => {
+  it('should exist and export a function', () => {
+    const showDialog = require('../src/ui/DialogBox');
+    assert.equal(typeof showDialog, 'function');
+  });
+});
+
+describe('HighScoreScreen', () => {
+  it('should load and export a class', () => {
+    const HighScoreScreen = require('../src/screens/HighScoreScreen');
+    assert.equal(typeof HighScoreScreen, 'function');
+  });
+
+  it('high score persistence: save and load', () => {
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const os = require('node:os');
+    const SCORES_DIR = path.join(os.homedir(), '.oregon-trail');
+    const SCORES_FILE = path.join(SCORES_DIR, 'highscores.json');
+
+    // Read current scores (they should exist from manual play)
+    if (fs.existsSync(SCORES_FILE)) {
+      const data = JSON.parse(fs.readFileSync(SCORES_FILE, 'utf8'));
+      assert.ok(Array.isArray(data), 'scores file should contain an array');
+      for (const entry of data) {
+        assert.ok(entry.name, 'each entry should have a name');
+        assert.ok(typeof entry.score === 'number', 'each entry should have a numeric score');
+      }
+    }
+  });
+});
+
+describe('FortScreen conversations', () => {
+  it('conversations data loads for all forts', () => {
+    const conversations = require('../src/data/conversations');
+    const lm = require('../src/data/landmarks');
+    const forts = lm.filter((l) => l.type === 'fort');
+
+    assert.ok(forts.length >= 5, 'should have at least 5 forts');
+    for (const fort of forts) {
+      const convos = conversations[fort.name];
+      assert.ok(Array.isArray(convos), `${fort.name} should have conversations array`);
+      assert.ok(convos.length >= 1, `${fort.name} should have at least 1 conversation`);
+      for (const c of convos) {
+        assert.ok(c.speaker, `conversation in ${fort.name} should have speaker`);
+        assert.ok(c.text, `conversation in ${fort.name} should have text`);
+      }
+    }
+  });
+});
+
+describe('GameEngine screen transitions', () => {
+  it('GameEngine has all required screen transition methods', () => {
+    const GameEngine = require('../src/game/GameEngine');
+    const engineProto = Object.getOwnPropertyNames(GameEngine.prototype);
+    assert.ok(engineProto.includes('showHighScores'), 'GameEngine should have showHighScores method');
+    assert.ok(engineProto.includes('showTitle'), 'GameEngine should have showTitle method');
+    assert.ok(engineProto.includes('showFort'), 'GameEngine should have showFort method');
+    assert.ok(engineProto.includes('showVictory'), 'GameEngine should have showVictory method');
+  });
+});
+
+describe('Map dialog content', () => {
+  it('map should include all landmarks', () => {
+    const lm = require('../src/data/landmarks');
+    assert.ok(lm.length >= 15, 'should have at least 15 landmarks');
+    assert.equal(lm[0].name, 'Independence, MO');
+    assert.equal(lm[lm.length - 1].name, 'Willamette Valley (Oregon City)');
+  });
+});

@@ -62,6 +62,7 @@ class GameEngine {
   showTitle() {
     this.state = 'title';
     const s = new TitleScreen(this.screen, {
+      engine: this,
       onComplete: (action) => {
         if (action === 'travel') {
           this.showSetup();
