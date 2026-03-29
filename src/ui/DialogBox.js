@@ -1,5 +1,3 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, boxStyles, tag, bold } = require('./Theme');
 
@@ -43,12 +41,8 @@ function showDialog(screen, opts) {
     if (hasChoices) {
       content += '\n';
       choices.forEach((c, i) => {
-        const prefix = i === selectedIndex
-          ? bold(tag(colors.highlight, '▸ '))
-          : '  ';
-        const label = i === selectedIndex
-          ? bold(tag(colors.highlight, c))
-          : c;
+        const prefix = i === selectedIndex ? bold(tag(colors.highlight, '▸ ')) : '  ';
+        const label = i === selectedIndex ? bold(tag(colors.highlight, c)) : c;
         content += `\n${prefix}${label}`;
       });
     } else {

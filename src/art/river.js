@@ -7,7 +7,7 @@ function riverScene(width, depth) {
   bankTop.push(
     '{green-fg}vvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvV{/green-fg}',
     '{green-fg} ^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^{/green-fg}',
-    '{yellow-fg}.:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:.:{/yellow-fg}'
+    '{yellow-fg}.:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:.:{/yellow-fg}',
   );
 
   // Water rows depend on width and depth
@@ -23,7 +23,7 @@ function riverScene(width, depth) {
     padding = 12;
   }
 
-  const padStr = ' '.repeat(padding);
+  const _padStr = ' '.repeat(padding);
   const halfPad = ' '.repeat(Math.floor(padding / 2));
 
   const shallowRows = [
@@ -64,8 +64,8 @@ function riverScene(width, depth) {
     if (padding > 0) {
       water.push(
         `{yellow-fg}${halfPad.substring(0, Math.floor(padding / 2))}{/yellow-fg}` +
-        `{${color}-fg}${trimmed}{/${color}-fg}` +
-        `{yellow-fg}${halfPad.substring(0, Math.floor(padding / 2))}{/yellow-fg}`
+          `{${color}-fg}${trimmed}{/${color}-fg}` +
+          `{yellow-fg}${halfPad.substring(0, Math.floor(padding / 2))}{/yellow-fg}`,
       );
     } else {
       water.push(`{${color}-fg}${trimmed}{/${color}-fg}`);
@@ -76,7 +76,7 @@ function riverScene(width, depth) {
   bankBottom.push(
     '{yellow-fg}.:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:..:.:{/yellow-fg}',
     '{green-fg} ^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^^^"^{/green-fg}',
-    '{green-fg}vvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvV{/green-fg}'
+    '{green-fg}vvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvVvvV{/green-fg}',
   );
 
   return [...bankTop, ...water, ...bankBottom].join('\n');
@@ -87,10 +87,7 @@ const raft =
   '{yellow-fg}|{bold}====={/bold}|{/yellow-fg}\n' +
   '{yellow-fg}|_____|{/yellow-fg}';
 
-const rock =
-  '{white-fg}  /\\  {/white-fg}\n' +
-  '{white-fg} /  \\ {/white-fg}\n' +
-  '{white-fg}/____\\{/white-fg}';
+const rock = '{white-fg}  /\\  {/white-fg}\n' + '{white-fg} /  \\ {/white-fg}\n' + '{white-fg}/____\\{/white-fg}';
 
 const riverBank =
   '{green-fg}vv{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}Vv{/green-fg}{yellow-fg}:{/yellow-fg}{green-fg}vV{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}vv{/green-fg}{yellow-fg}:{/yellow-fg}{green-fg}Vv{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}vV{/green-fg}{yellow-fg}:{/yellow-fg}{green-fg}vv{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}Vv{/green-fg}{yellow-fg}:{/yellow-fg}{green-fg}vV{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}vv{/green-fg}{yellow-fg}:{/yellow-fg}{green-fg}Vv{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}vV{/green-fg}{yellow-fg}:{/yellow-fg}{green-fg}vv{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}Vv{/green-fg}{yellow-fg}:{/yellow-fg}{green-fg}vV{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}vv{/green-fg}{yellow-fg}:{/yellow-fg}{green-fg}Vv{/green-fg}{yellow-fg}.{/yellow-fg}{green-fg}vV{/green-fg}\n' +

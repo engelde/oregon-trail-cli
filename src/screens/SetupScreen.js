@@ -1,5 +1,3 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, tag, bold, boldColor } = require('../ui/Theme');
 
@@ -22,9 +20,9 @@ const MONTHS = [
 class SetupScreen {
   constructor(screen, props) {
     this.screen = screen;
-    this.engine = (props && props.engine) || null;
-    this.gameState = (props && props.gameState) || null;
-    this.onComplete = (props && props.onComplete) || null;
+    this.engine = props?.engine || null;
+    this.gameState = props?.gameState || null;
+    this.onComplete = props?.onComplete || null;
     this.widgets = [];
     this.keyHandlers = [];
     this.step = 1;
@@ -59,9 +57,7 @@ class SetupScreen {
       left: 'center',
       width: 62,
       height: 6,
-      content:
-        'Many kinds of people made the trip to Oregon.\n\n' +
-        'You may:',
+      content: 'Many kinds of people made the trip to Oregon.\n\n' + 'You may:',
       tags: true,
       border: { type: 'line' },
       padding: { left: 2, right: 2, top: 1 },
@@ -97,10 +93,12 @@ class SetupScreen {
       left: 'center',
       width: 62,
       height: 5,
-      content: tag(colors.muted,
+      content: tag(
+        colors.muted,
         'Bankers start with the most money but earn fewer\n' +
-        'points. Farmers start with the least but earn the\n' +
-        'highest score multiplier.'),
+          'points. Farmers start with the least but earn the\n' +
+          'highest score multiplier.',
+      ),
       tags: true,
       border: { type: 'line' },
       padding: { left: 2, right: 2 },
@@ -443,7 +441,9 @@ class SetupScreen {
       this.screen.unkey(keys, handler);
     });
     this.keyHandlers = [];
-    this.widgets.forEach(w => { w.detach(); });
+    this.widgets.forEach((w) => {
+      w.detach();
+    });
     this.widgets = [];
   }
 

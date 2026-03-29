@@ -1,13 +1,15 @@
-'use strict';
-
 const blessed = require('blessed');
-const { colors, tag, bold, boldColor } = require('../ui/Theme');
+const { colors, tag, boldColor } = require('../ui/Theme');
 
 let victoryArt = '';
-try { victoryArt = require('../art/misc').victory || ''; } catch (_) {}
+try {
+  victoryArt = require('../art/misc').victory || '';
+} catch (_) {}
 
 let landmarkArt = {};
-try { landmarkArt = require('../art/landmarks').landmarks || {}; } catch (_) {}
+try {
+  landmarkArt = require('../art/landmarks').landmarks || {};
+} catch (_) {}
 
 class VictoryScreen {
   constructor(screen, gameState, onComplete) {
@@ -19,7 +21,10 @@ class VictoryScreen {
     this.intervals = [];
   }
 
-  addWidget(widget) { this.widgets.push(widget); this.screen.append(widget); }
+  addWidget(widget) {
+    this.widgets.push(widget);
+    this.screen.append(widget);
+  }
 
   registerKey(keys, handler) {
     this.screen.key(keys, handler);
@@ -29,7 +34,7 @@ class VictoryScreen {
   create() {
     const gs = this.gameState;
     const alive = gs.getAliveMembers();
-    const dead = gs.party.filter(m => m.health === 'dead');
+    const dead = gs.party.filter((m) => m.health === 'dead');
     const supplies = gs.supplies;
 
     // ── Score calculation ──────────────────────────────────────
@@ -43,11 +48,9 @@ class VictoryScreen {
     const spareCount = (supplies.wheels || 0) + (supplies.axles || 0) + (supplies.tongues || 0);
     const sparePoints = spareCount * 20;
     const cashPoints = Math.floor((gs.money || 0) / 5) * 2;
-    const subtotal = partyPoints + foodPoints + clothingPoints + ammoPoints
-      + oxenPoints + sparePoints + cashPoints;
+    const subtotal = partyPoints + foodPoints + clothingPoints + ammoPoints + oxenPoints + sparePoints + cashPoints;
     const multiplier = gs.getProfessionMultiplier();
-    const profLabel = (gs.profession || 'unknown').charAt(0).toUpperCase()
-      + (gs.profession || 'unknown').slice(1);
+    const profLabel = (gs.profession || 'unknown').charAt(0).toUpperCase() + (gs.profession || 'unknown').slice(1);
     const finalScore = subtotal * multiplier;
 
     // ── Helpers ────────────────────────────────────────────────
@@ -64,9 +67,7 @@ class VictoryScreen {
 
     // ── Art ────────────────────────────────────────────────────
 
-    const artText = victoryArt
-      || landmarkArt['Willamette Valley (Oregon City)']
-      || '';
+    const artText = victoryArt || landmarkArt['Willamette Valley (Oregon City)'] || '';
 
     // ── Assemble content ──────────────────────────────────────
 
@@ -91,50 +92,42 @@ class VictoryScreen {
       const healthStr = m.health || 'good';
       lines.push(
         `  ${tag('green', '✓')} ${tag(colors.text, m.name)}` +
-        ` ${tag(colors.muted, '—')} ${tag(colors.text, 'Health:')}` +
-        ` ${tag('green', healthStr)}`
+          ` ${tag(colors.muted, '—')} ${tag(colors.text, 'Health:')}` +
+          ` ${tag('green', healthStr)}`,
       );
     }
     for (const m of dead) {
       lines.push(
         `  ${tag('red', '✗')} ${tag(colors.text, m.name)}` +
-        ` ${tag(colors.muted, '—')} ${tag('red', 'Did not survive')}`
+          ` ${tag(colors.muted, '—')} ${tag('red', 'Did not survive')}`,
       );
     }
     lines.push('');
-    lines.push(
-      tag(colors.text, `  ${survivorCount} of ${gs.party.length} party members survived.`)
-    );
+    lines.push(tag(colors.text, `  ${survivorCount} of ${gs.party.length} party members survived.`));
     lines.push('');
 
     // Section 4: Score breakdown
     lines.push(boldColor(colors.secondary, '  Points breakdown:'));
     lines.push(tag(colors.muted, '  ' + '─'.repeat(50)));
 
-    lines.push(scoreLine(
-      `Surviving party members:  ${survivorCount} × 500 =`, partyPoints
-    ));
+    lines.push(scoreLine(`Surviving party members:  ${survivorCount} × 500 =`, partyPoints));
     lines.push(tag(colors.text, '  Remaining supplies:'));
     lines.push(scoreLine(`    Food (${fmt(supplies.food || 0)} lbs):`, foodPoints));
     lines.push(scoreLine(`    Clothing (${supplies.clothing || 0} sets):`, clothingPoints));
     lines.push(scoreLine(`    Ammunition (${supplies.ammunition || 0} boxes):`, ammoPoints));
     lines.push(scoreLine(`    Oxen (${supplies.oxen || 0}):`, oxenPoints));
     lines.push(scoreLine(`    Spare parts (${spareCount}):`, sparePoints));
-    lines.push(scoreLine(
-      `  Remaining cash:  ${fmtMoney(gs.money || 0)} →`, cashPoints
-    ));
+    lines.push(scoreLine(`  Remaining cash:  ${fmtMoney(gs.money || 0)} →`, cashPoints));
 
     lines.push(tag(colors.muted, '  ' + '─'.repeat(50)));
     lines.push(scoreLine('  Subtotal:', subtotal));
     lines.push(
-      tag(colors.text, `  Profession multiplier (${profLabel}):`) +
-      boldColor(colors.secondary, `  ×${multiplier}`)
+      tag(colors.text, `  Profession multiplier (${profLabel}):`) + boldColor(colors.secondary, `  ×${multiplier}`),
     );
     lines.push(tag(colors.muted, '  ' + '─'.repeat(50)));
     lines.push('');
     lines.push(
-      `  ${boldColor(colors.highlight, 'FINAL SCORE:')}` +
-      `  ${boldColor(colors.secondary, fmt(finalScore))}`
+      `  ${boldColor(colors.highlight, 'FINAL SCORE:')}` + `  ${boldColor(colors.secondary, fmt(finalScore))}`,
     );
     lines.push('');
 
@@ -177,9 +170,9 @@ class VictoryScreen {
   }
 
   destroy() {
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];

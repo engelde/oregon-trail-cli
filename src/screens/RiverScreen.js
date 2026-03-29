@@ -1,25 +1,42 @@
-'use strict';
-
 const blessed = require('blessed');
 
 let colors, tag, bold, boldColor;
 try {
   ({ colors, tag, bold, boldColor } = require('../ui/Theme'));
 } catch (_) {
-  colors = { primary: 'green', secondary: 'yellow', danger: 'red', water: 'blue', text: 'white', bg: 'black', muted: 'gray', highlight: 'cyan' };
+  colors = {
+    primary: 'green',
+    secondary: 'yellow',
+    danger: 'red',
+    water: 'blue',
+    text: 'white',
+    bg: 'black',
+    muted: 'gray',
+    highlight: 'cyan',
+  };
   tag = (c, t) => `{${c}-fg}${t}{/${c}-fg}`;
   bold = (t) => `{bold}${t}{/bold}`;
   boldColor = (c, t) => bold(tag(c, t));
 }
 
 let showDialog;
-try { showDialog = require('../ui/DialogBox'); } catch (_) { showDialog = null; }
+try {
+  showDialog = require('../ui/DialogBox');
+} catch (_) {
+  showDialog = null;
+}
 
 let riverArt;
-try { riverArt = require('../art/river'); } catch (_) { riverArt = {}; }
+try {
+  riverArt = require('../art/river');
+} catch (_) {
+  riverArt = {};
+}
 
 let landmarkArt = {};
-try { landmarkArt = require('../art/landmarks').landmarks; } catch (_) {}
+try {
+  landmarkArt = require('../art/landmarks').landmarks;
+} catch (_) {}
 
 const FLOW_LABELS = {
   calm: 'calm and steady',
@@ -67,9 +84,9 @@ class RiverScreen {
       this.currentDialog.destroy();
       this.currentDialog = null;
     }
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];
@@ -89,10 +106,9 @@ class RiverScreen {
     const widthCategory = this.width < 150 ? 'narrow' : this.width < 250 ? 'medium' : 'wide';
     const depthCategory = this.depth < 4 ? 'shallow' : 'deep';
 
-    const art = landmarkArt[this.river.name] ||
-      (typeof riverArt.riverScene === 'function'
-        ? riverArt.riverScene(widthCategory, depthCategory)
-        : '');
+    const art =
+      landmarkArt[this.river.name] ||
+      (typeof riverArt.riverScene === 'function' ? riverArt.riverScene(widthCategory, depthCategory) : '');
 
     const artBox = blessed.box({
       top: 0,
@@ -118,9 +134,7 @@ class RiverScreen {
   _buildInfoBox() {
     const flowText = FLOW_LABELS[this.flow] || this.flow;
     const riverName = this.river.name.replace(/ Crossing$/i, '');
-    const dateStr = typeof this.gameState.getDateString === 'function'
-      ? this.gameState.getDateString()
-      : '';
+    const dateStr = typeof this.gameState.getDateString === 'function' ? this.gameState.getDateString() : '';
     const weatherStr = this.gameState.weather || '';
 
     const lines = [
@@ -173,7 +187,11 @@ class RiverScreen {
 
   showCrossingMenu() {
     this.clearKeys();
-    if (this.menuBox) { try { this.menuBox.detach(); } catch (_) {} }
+    if (this.menuBox) {
+      try {
+        this.menuBox.detach();
+      } catch (_) {}
+    }
 
     const rd = this.river.riverData || {};
     const ferryCost = rd.ferryCost || 0;
@@ -253,11 +271,21 @@ class RiverScreen {
 
   _executeAction(action) {
     switch (action) {
-      case 'ford':  this.attemptFord();  break;
-      case 'caulk': this.attemptCaulk(); break;
-      case 'ferry': this.attemptFerry(); break;
-      case 'guide': this.attemptGuide(); break;
-      case 'wait':  this.waitForConditions(); break;
+      case 'ford':
+        this.attemptFord();
+        break;
+      case 'caulk':
+        this.attemptCaulk();
+        break;
+      case 'ferry':
+        this.attemptFerry();
+        break;
+      case 'guide':
+        this.attemptGuide();
+        break;
+      case 'wait':
+        this.waitForConditions();
+        break;
     }
   }
 
@@ -272,17 +300,17 @@ class RiverScreen {
 
     if (this.depth <= 2.5) {
       // Shallow: 90% safe, 10% minor
-      outcome = roll < 0.90 ? 'safe' : 'minor';
+      outcome = roll < 0.9 ? 'safe' : 'minor';
     } else if (this.depth <= 4) {
       // Medium: 60% safe, 30% supply loss, 10% major
-      if (roll < 0.60) outcome = 'safe';
-      else if (roll < 0.90) outcome = 'supply';
+      if (roll < 0.6) outcome = 'safe';
+      else if (roll < 0.9) outcome = 'supply';
       else outcome = 'major';
     } else {
       // Deep: 20% safe, 40% supply, 20% major, 20% catastrophic
-      if (roll < 0.20) outcome = 'safe';
-      else if (roll < 0.60) outcome = 'supply';
-      else if (roll < 0.80) outcome = 'major';
+      if (roll < 0.2) outcome = 'safe';
+      else if (roll < 0.6) outcome = 'supply';
+      else if (roll < 0.8) outcome = 'major';
       else outcome = 'catastrophic';
     }
 
@@ -300,7 +328,7 @@ class RiverScreen {
 
     if (roll < 0.65) {
       outcome = 'safe';
-    } else if (roll < 0.90) {
+    } else if (roll < 0.9) {
       outcome = 'minor';
     } else {
       outcome = 'major';
@@ -316,9 +344,8 @@ class RiverScreen {
     const cost = rd.ferryCost || 0;
 
     if (this.gameState.money < cost) {
-      this._showTemporaryMessage(
-        boldColor(colors.danger, `You can't afford the ferry ($${cost})`),
-        () => this.showCrossingMenu()
+      this._showTemporaryMessage(boldColor(colors.danger, `You can't afford the ferry ($${cost})`), () =>
+        this.showCrossingMenu(),
       );
       return;
     }
@@ -327,10 +354,13 @@ class RiverScreen {
     this.gameState.addDays(1);
     this.gameState.consumeFood();
 
-    this._showCrossingResult(true, [
-      tag(colors.primary, `You safely crossed the ${this.river.name}!`),
-      tag(colors.muted, `You paid $${cost} for the ferry.`),
-    ].join('\n'));
+    this._showCrossingResult(
+      true,
+      [
+        tag(colors.primary, `You safely crossed the ${this.river.name}!`),
+        tag(colors.muted, `You paid $${cost} for the ferry.`),
+      ].join('\n'),
+    );
   }
 
   // ── Hire a Guide ────────────────────────────────────────────
@@ -339,9 +369,8 @@ class RiverScreen {
     const cost = this._getGuideCost();
 
     if (this.gameState.money < cost) {
-      this._showTemporaryMessage(
-        boldColor(colors.danger, `You can't afford the guide ($${cost})`),
-        () => this.showCrossingMenu()
+      this._showTemporaryMessage(boldColor(colors.danger, `You can't afford the guide ($${cost})`), () =>
+        this.showCrossingMenu(),
       );
       return;
     }
@@ -352,10 +381,13 @@ class RiverScreen {
 
     const roll = Math.random();
     if (roll < 0.95) {
-      this._showCrossingResult(true, [
-        tag(colors.primary, `You safely crossed the ${this.river.name}!`),
-        tag(colors.muted, `The guide charged you $${cost}.`),
-      ].join('\n'));
+      this._showCrossingResult(
+        true,
+        [
+          tag(colors.primary, `You safely crossed the ${this.river.name}!`),
+          tag(colors.muted, `The guide charged you $${cost}.`),
+        ].join('\n'),
+      );
     } else {
       this._resolveCrossingOutcome('minor');
     }
@@ -395,7 +427,7 @@ class RiverScreen {
         this.intervals = [];
         this.currentDialog = null;
         this.create();
-      }
+      },
     );
   }
 
@@ -404,8 +436,7 @@ class RiverScreen {
   _resolveCrossingOutcome(outcome) {
     switch (outcome) {
       case 'safe':
-        this._showCrossingResult(true,
-          tag(colors.primary, `You safely crossed the ${this.river.name}!`));
+        this._showCrossingResult(true, tag(colors.primary, `You safely crossed the ${this.river.name}!`));
         break;
       case 'minor':
         this._applySupplyLoss(false);
@@ -449,10 +480,13 @@ class RiverScreen {
       losses.push('1 ox');
     }
 
-    this._showCrossingResult(false, [
-      boldColor(colors.secondary, 'The river crossing was rough.'),
-      tag(colors.text, `You lost: ${losses.join(', ')}.`),
-    ].join('\n'));
+    this._showCrossingResult(
+      false,
+      [
+        boldColor(colors.secondary, 'The river crossing was rough.'),
+        tag(colors.text, `You lost: ${losses.join(', ')}.`),
+      ].join('\n'),
+    );
   }
 
   _applyMajorLoss() {
@@ -481,10 +515,13 @@ class RiverScreen {
       losses.push('1 ox');
     }
 
-    this._showCrossingResult(false, [
-      boldColor(colors.danger, 'Disaster at the river crossing!'),
-      tag(colors.text, `You lost: ${losses.join(', ')}.`),
-    ].join('\n'));
+    this._showCrossingResult(
+      false,
+      [
+        boldColor(colors.danger, 'Disaster at the river crossing!'),
+        tag(colors.text, `You lost: ${losses.join(', ')}.`),
+      ].join('\n'),
+    );
   }
 
   _applyCatastrophicLoss() {
@@ -515,7 +552,7 @@ class RiverScreen {
 
     // 5-10% chance a party member drowns
     let drownedName = null;
-    if (Math.random() < 0.10) {
+    if (Math.random() < 0.1) {
       drownedName = this._drownPartyMember();
     }
 
@@ -526,17 +563,17 @@ class RiverScreen {
 
     if (drownedName) {
       resultLines.push('');
-      resultLines.push(boldColor(colors.danger,
-        `${drownedName} drowned while crossing the river.`));
+      resultLines.push(boldColor(colors.danger, `${drownedName} drowned while crossing the river.`));
     }
 
     this._showCrossingResult(false, resultLines.join('\n'));
   }
 
   _drownPartyMember() {
-    const alive = typeof this.gameState.getAliveMembers === 'function'
-      ? this.gameState.getAliveMembers()
-      : (this.gameState.party || []).filter(m => m.health !== 'dead');
+    const alive =
+      typeof this.gameState.getAliveMembers === 'function'
+        ? this.gameState.getAliveMembers()
+        : (this.gameState.party || []).filter((m) => m.health !== 'dead');
 
     if (alive.length === 0) return null;
 
@@ -550,8 +587,8 @@ class RiverScreen {
     }
 
     victim.health = 'dead';
-    if (victim.alive !== undefined) victim.alive = false;
-    if (victim.causeOfDeath !== undefined || true) victim.causeOfDeath = 'drowning';
+    victim._hp = 0;
+    victim.causeOfDeath = 'drowning';
 
     return victim.name;
   }
@@ -560,7 +597,11 @@ class RiverScreen {
 
   _showCrossingResult(success, message, resultType) {
     this.clearKeys();
-    if (this.menuBox) { try { this.menuBox.detach(); } catch (_) {} }
+    if (this.menuBox) {
+      try {
+        this.menuBox.detach();
+      } catch (_) {}
+    }
 
     const onDone = () => {
       if (this.onComplete) this.onComplete(resultType || 'done');
@@ -581,7 +622,7 @@ class RiverScreen {
   }
 
   _showResultBox(success, message, callback) {
-    const box = blessed.box({
+    const _box = blessed.box({
       parent: this.menuArea,
       top: 0,
       left: 'center',
@@ -608,7 +649,11 @@ class RiverScreen {
 
   _showTemporaryMessage(message, callback) {
     this.clearKeys();
-    if (this.menuBox) { try { this.menuBox.detach(); } catch (_) {} }
+    if (this.menuBox) {
+      try {
+        this.menuBox.detach();
+      } catch (_) {}
+    }
 
     const box = blessed.box({
       parent: this.menuArea,
@@ -630,7 +675,9 @@ class RiverScreen {
     this.screen.render();
 
     this.registerKey(['enter', 'return'], () => {
-      try { box.detach(); } catch (_) {}
+      try {
+        box.detach();
+      } catch (_) {}
       if (callback) callback();
     });
   }

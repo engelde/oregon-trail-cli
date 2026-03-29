@@ -1,13 +1,15 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, tag, bold, boldColor } = require('../ui/Theme');
 
 let landmarkArt = {};
-try { landmarkArt = require('../art/landmarks').landmarks; } catch (_) {}
+try {
+  landmarkArt = require('../art/landmarks').landmarks;
+} catch (_) {}
 
 let conversations = {};
-try { conversations = require('../data/conversations'); } catch (_) {}
+try {
+  conversations = require('../data/conversations');
+} catch (_) {}
 
 const FORT_MULTIPLIERS = {
   'Fort Kearney': 1.5,
@@ -18,13 +20,13 @@ const FORT_MULTIPLIERS = {
 };
 
 const STORE_ITEMS = [
-  { key: 'food',        name: 'Food',           unit: 'lbs',   basePrice: 0.20, increment: 50 },
-  { key: 'clothing',    name: 'Clothing',        unit: 'sets',  basePrice: 10,   increment: 1 },
-  { key: 'ammunition',  name: 'Ammunition',      unit: 'boxes', basePrice: 2,    increment: 1 },
-  { key: 'oxen',        name: 'Oxen',            unit: 'yoke',  basePrice: 40,   increment: 1 },
-  { key: 'wheels',      name: 'Wagon wheels',    unit: 'each',  basePrice: 10,   increment: 1 },
-  { key: 'axles',       name: 'Wagon axles',     unit: 'each',  basePrice: 10,   increment: 1 },
-  { key: 'tongues',     name: 'Wagon tongues',   unit: 'each',  basePrice: 10,   increment: 1 },
+  { key: 'food', name: 'Food', unit: 'lbs', basePrice: 0.2, increment: 50 },
+  { key: 'clothing', name: 'Clothing', unit: 'sets', basePrice: 10, increment: 1 },
+  { key: 'ammunition', name: 'Ammunition', unit: 'boxes', basePrice: 2, increment: 1 },
+  { key: 'oxen', name: 'Oxen', unit: 'yoke', basePrice: 40, increment: 1 },
+  { key: 'wheels', name: 'Wagon wheels', unit: 'each', basePrice: 10, increment: 1 },
+  { key: 'axles', name: 'Wagon axles', unit: 'each', basePrice: 10, increment: 1 },
+  { key: 'tongues', name: 'Wagon tongues', unit: 'each', basePrice: 10, increment: 1 },
 ];
 
 class FortScreen {
@@ -42,7 +44,10 @@ class FortScreen {
     this.init();
   }
 
-  addWidget(w) { this.widgets.push(w); this.screen.append(w); }
+  addWidget(w) {
+    this.widgets.push(w);
+    this.screen.append(w);
+  }
 
   registerKey(keys, fn) {
     this.screen.key(keys, fn);
@@ -50,14 +55,16 @@ class FortScreen {
   }
 
   destroy() {
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];
     if (this.activeDialog) {
-      try { this.activeDialog.detach(); } catch (_) {}
+      try {
+        this.activeDialog.detach();
+      } catch (_) {}
       this.activeDialog = null;
     }
     this.screen.render();
@@ -65,7 +72,9 @@ class FortScreen {
 
   clearDialog() {
     if (this.activeDialog) {
-      try { this.activeDialog.detach(); } catch (_) {}
+      try {
+        this.activeDialog.detach();
+      } catch (_) {}
       this.activeDialog = null;
     }
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
@@ -193,17 +202,29 @@ class FortScreen {
     });
 
     for (let i = 1; i <= 6; i++) {
-      this.registerKey([String(i)], () => { this.handleMenuChoice(i - 1); });
+      this.registerKey([String(i)], () => {
+        this.handleMenuChoice(i - 1);
+      });
     }
   }
 
   handleMenuChoice(index) {
     switch (index) {
-      case 0: this.showLookAround(); break;
-      case 1: this.showBuySupplies(); break;
-      case 2: this.showRest(); break;
-      case 3: this.showTalkToPeople(); break;
-      case 4: this.showTrade(); break;
+      case 0:
+        this.showLookAround();
+        break;
+      case 1:
+        this.showBuySupplies();
+        break;
+      case 2:
+        this.showRest();
+        break;
+      case 3:
+        this.showTalkToPeople();
+        break;
+      case 4:
+        this.showTrade();
+        break;
       case 5:
         this.destroy();
         if (this.onComplete) this.onComplete();
@@ -243,7 +264,9 @@ class FortScreen {
     this.activeDialog = box;
     this.screen.render();
 
-    this.registerKey(['enter', 'return', 'escape'], () => { this.showMainMenu(); });
+    this.registerKey(['enter', 'return', 'escape'], () => {
+      this.showMainMenu();
+    });
   }
 
   // ── Buy supplies ─────────────────────────────────────────────
@@ -275,19 +298,15 @@ class FortScreen {
       const gs = this.gameState;
       const lines = [
         `${tag(colors.muted, 'Cash:')} ${boldColor('green', '$' + gs.money.toFixed(2))}` +
-        `   ${tag(colors.muted, 'Price multiplier:')} ${boldColor('yellow', this.multiplier.toFixed(1) + 'x')}`,
+          `   ${tag(colors.muted, 'Price multiplier:')} ${boldColor('yellow', this.multiplier.toFixed(1) + 'x')}`,
         '',
       ];
 
       STORE_ITEMS.forEach((item, i) => {
         const price = (item.basePrice * this.multiplier).toFixed(2);
         const owned = gs.supplies[item.key] || 0;
-        const prefix = i === this.storeIndex
-          ? bold(tag(colors.highlight, '▸ '))
-          : '  ';
-        const label = i === this.storeIndex
-          ? bold(tag(colors.highlight, item.name))
-          : item.name;
+        const prefix = i === this.storeIndex ? bold(tag(colors.highlight, '▸ ')) : '  ';
+        const label = i === this.storeIndex ? bold(tag(colors.highlight, item.name)) : item.name;
         lines.push(`${prefix}${label}  $${price}/${item.unit}  (have: ${owned})`);
       });
 
@@ -347,7 +366,9 @@ class FortScreen {
     });
     this.screen.render();
     const t = setTimeout(() => {
-      try { flash.detach(); } catch (_) {}
+      try {
+        flash.detach();
+      } catch (_) {}
       this.screen.render();
       if (callback) callback();
     }, 1200);
@@ -389,7 +410,9 @@ class FortScreen {
         this.performRest(d);
       });
     }
-    this.registerKey(['escape'], () => { this.showMainMenu(); });
+    this.registerKey(['escape'], () => {
+      this.showMainMenu();
+    });
   }
 
   performRest(days) {
@@ -451,7 +474,9 @@ class FortScreen {
     this.updateStatus();
     this.screen.render();
 
-    this.registerKey(['enter', 'return'], () => { this.showMainMenu(); });
+    this.registerKey(['enter', 'return'], () => {
+      this.showMainMenu();
+    });
   }
 
   // ── Talk to people ───────────────────────────────────────────
@@ -497,7 +522,9 @@ class FortScreen {
     this.activeDialog = box;
     this.screen.render();
 
-    this.registerKey(['enter', 'return', 'escape'], () => { this.showMainMenu(); });
+    this.registerKey(['enter', 'return', 'escape'], () => {
+      this.showMainMenu();
+    });
   }
 
   // ── Trade ────────────────────────────────────────────────────
@@ -513,7 +540,7 @@ class FortScreen {
     ];
 
     const offering = tradeGoods[Math.floor(Math.random() * tradeGoods.length)];
-    const otherGoods = tradeGoods.filter(g => g.key !== offering.key);
+    const otherGoods = tradeGoods.filter((g) => g.key !== offering.key);
     const wanting = otherGoods[Math.floor(Math.random() * otherGoods.length)];
 
     const offerQty = offering.amounts[Math.floor(Math.random() * offering.amounts.length)];
@@ -573,18 +600,23 @@ class FortScreen {
             bg: colors.bg,
           },
           padding: { left: 2, right: 2, top: 1, bottom: 1 },
-          content: boldColor(colors.primary, 'Trade complete!') + '\n\n' +
-            tag(colors.muted, 'Press ENTER to continue'),
+          content: boldColor(colors.primary, 'Trade complete!') + '\n\n' + tag(colors.muted, 'Press ENTER to continue'),
         });
         this.activeDialog = resultBox;
         this.screen.render();
-        this.registerKey(['enter', 'return'], () => { this.showMainMenu(); });
+        this.registerKey(['enter', 'return'], () => {
+          this.showMainMenu();
+        });
       });
     }
 
-    this.registerKey(['n', 'escape'], () => { this.showMainMenu(); });
+    this.registerKey(['n', 'escape'], () => {
+      this.showMainMenu();
+    });
     if (!canTrade) {
-      this.registerKey(['enter', 'return'], () => { this.showMainMenu(); });
+      this.registerKey(['enter', 'return'], () => {
+        this.showMainMenu();
+      });
     }
   }
 }

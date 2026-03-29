@@ -1,11 +1,11 @@
-'use strict';
-
 const blessed = require('blessed');
-const { colors, tag, bold, boldColor } = require('../ui/Theme');
+const { colors, tag, boldColor } = require('../ui/Theme');
 const { diseases } = require('../data/diseases');
 
 let miscArt = {};
-try { miscArt = require('../art/misc'); } catch (_) {}
+try {
+  miscArt = require('../art/misc');
+} catch (_) {}
 
 // ── Health helpers ──────────────────────────────────────────────
 
@@ -55,16 +55,12 @@ const EVENT_POOL = [
   { name: 'Indian guide helps party!', type: 'guide_help', weight: 2 },
 ];
 
-const POSITIVE_TYPES = new Set([
-  'find_food', 'find_supplies', 'good_weather', 'shortcut', 'guide_help',
-]);
-const NEGATIVE_TYPES = new Set([
-  'disease', 'theft', 'breakdown', 'ox_lost', 'bad_water',
-]);
+const POSITIVE_TYPES = new Set(['find_food', 'find_supplies', 'good_weather', 'shortcut', 'guide_help']);
+const NEGATIVE_TYPES = new Set(['disease', 'theft', 'breakdown', 'ox_lost', 'bad_water']);
 
 // ── Weighted random selection ──────────────────────────────────
 
-function pickWeightedEvent() {
+function _pickWeightedEvent() {
   const totalWeight = EVENT_POOL.reduce((sum, e) => sum + e.weight, 0);
   let roll = Math.random() * totalWeight;
   for (const event of EVENT_POOL) {
@@ -197,9 +193,11 @@ class EventScreen {
     nextTop += 5;
 
     // ── Effect ─────────────────────────────────────────────────
-    const effectColor = POSITIVE_TYPES.has(event.type) ? colors.primary
-      : NEGATIVE_TYPES.has(event.type) ? colors.danger
-      : colors.text;
+    const effectColor = POSITIVE_TYPES.has(event.type)
+      ? colors.primary
+      : NEGATIVE_TYPES.has(event.type)
+        ? colors.danger
+        : colors.text;
 
     const effectBox = blessed.box({
       top: nextTop,
@@ -260,9 +258,7 @@ class EventScreen {
         const alive = gs.getAliveMembers();
         if (alive.length === 0) break;
         const victim = alive[randInt(0, alive.length - 1)];
-        const diseaseName = diseases[event.disease]
-          ? diseases[event.disease].name
-          : event.disease;
+        const diseaseName = diseases[event.disease] ? diseases[event.disease].name : event.disease;
         if (victim.health === 'poor' || victim.health === 'very poor') {
           victim.health = 'very poor';
         } else {
@@ -310,7 +306,7 @@ class EventScreen {
       case 'ox_lost': {
         gs.supplies.oxen = Math.max(0, gs.supplies.oxen - 1);
         if (miscArt.oxDead) art = miscArt.oxDead;
-        description = 'One of your oxen has wandered off and can\'t be found.';
+        description = "One of your oxen has wandered off and can't be found.";
         effect = `You now have ${gs.supplies.oxen} oxen.`;
         break;
       }
@@ -333,11 +329,10 @@ class EventScreen {
         gs.weather = event.weather;
         const weatherDesc = {
           'heavy rain': 'Heavy rains slow your progress and dampen spirits.',
-          'blizzard': 'A fierce blizzard descends! Travel is nearly impossible.',
-          'fog': 'Thick fog rolls in, making navigation difficult.',
+          blizzard: 'A fierce blizzard descends! Travel is nearly impossible.',
+          fog: 'Thick fog rolls in, making navigation difficult.',
         };
-        description = weatherDesc[event.weather]
-          || `The weather has turned to ${event.weather}.`;
+        description = weatherDesc[event.weather] || `The weather has turned to ${event.weather}.`;
         effect = `Weather is now: ${event.weather}.`;
         break;
       }
@@ -383,7 +378,7 @@ class EventScreen {
 
       case 'guide_help': {
         const alive = gs.getAliveMembers();
-        const sick = alive.filter(m => m.health !== 'good');
+        const sick = alive.filter((m) => m.health !== 'good');
         if (sick.length > 0) {
           const helped = sick[randInt(0, sick.length - 1)];
           const oldHealth = helped.health;
@@ -392,7 +387,7 @@ class EventScreen {
           effect = `${helped.name}'s health improved from ${oldHealth} to ${helped.health}.`;
         } else {
           description = 'A friendly guide shared wisdom about the trail ahead.';
-          effect = 'The party\'s spirits are lifted.';
+          effect = "The party's spirits are lifted.";
           gs.morale = Math.min(10, (gs.morale || 5) + 1);
         }
         break;
@@ -411,9 +406,9 @@ class EventScreen {
   // ── Cleanup ──────────────────────────────────────────────────
 
   destroy() {
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];

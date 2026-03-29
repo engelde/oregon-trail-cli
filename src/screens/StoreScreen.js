@@ -1,12 +1,18 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, boxStyles, tag, bold, boldColor } = require('../ui/Theme');
 const showDialog = require('../ui/DialogBox');
 
 const storeItems = [
   { key: 'oxen', name: 'Oxen', price: 40, unit: 'yoke', description: '(a pair of oxen)' },
-  { key: 'food', name: 'Food', price: 0.20, unit: 'lb', description: '(per pound)', buyIncrement: 50, displayPrice: '$10.00 per 50 lbs' },
+  {
+    key: 'food',
+    name: 'Food',
+    price: 0.2,
+    unit: 'lb',
+    description: '(per pound)',
+    buyIncrement: 50,
+    displayPrice: '$10.00 per 50 lbs',
+  },
   { key: 'clothing', name: 'Clothing', price: 10, unit: 'set', description: '(per set)' },
   { key: 'ammunition', name: 'Ammunition', price: 2, unit: 'box', description: '(box of 20 bullets)' },
   { key: 'wheels', name: 'Wagon wheels', price: 10, unit: 'each', description: '(spare wheel)' },
@@ -17,19 +23,21 @@ const storeItems = [
 class StoreScreen {
   constructor(screen, props) {
     this.screen = screen;
-    this.engine = (props && props.engine) || null;
-    this.gameState = (props && props.gameState) || null;
-    this.onComplete = (props && props.onComplete) || null;
+    this.engine = props?.engine || null;
+    this.gameState = props?.gameState || null;
+    this.onComplete = props?.onComplete || null;
     this.widgets = [];
     this.keyHandlers = [];
     this._isBuying = false;
 
     // Initialize cash from gameState (set during profession selection)
-    this.cash = (this.gameState && this.gameState.money) || 0;
+    this.cash = this.gameState?.money || 0;
 
     // Shopping cart
     this.cart = {};
-    storeItems.forEach(item => { this.cart[item.key] = 0; });
+    storeItems.forEach((item) => {
+      this.cart[item.key] = 0;
+    });
   }
 
   addWidget(widget) {
@@ -50,7 +58,7 @@ class StoreScreen {
 
   getTotalSpent() {
     let total = 0;
-    storeItems.forEach(item => {
+    storeItems.forEach((item) => {
       const qty = this.cart[item.key];
       if (item.buyIncrement) {
         total += qty * item.buyIncrement * item.price;
@@ -218,7 +226,7 @@ class StoreScreen {
       const qty = parseInt(value, 10);
       dialog.destroy();
 
-      if (isNaN(qty) || qty <= 0) {
+      if (Number.isNaN(qty) || qty <= 0) {
         this._isBuying = false;
         this.refreshDisplay();
         return;
@@ -253,7 +261,9 @@ class StoreScreen {
     showDialog(this.screen, {
       title: ' Error ',
       message: boldColor(colors.danger, message),
-      callback: () => { if (cb) cb(); },
+      callback: () => {
+        if (cb) cb();
+      },
     });
   }
 
@@ -297,7 +307,7 @@ class StoreScreen {
   finalize() {
     // Transfer cart to gameState supplies
     if (this.gameState) {
-      storeItems.forEach(item => {
+      storeItems.forEach((item) => {
         const qty = this.cart[item.key];
         if (item.buyIncrement) {
           this.gameState.supplies[item.key] += qty * item.buyIncrement;
@@ -322,7 +332,9 @@ class StoreScreen {
       this.screen.unkey(keys, handler);
     });
     this.keyHandlers = [];
-    this.widgets.forEach(w => { w.detach(); });
+    this.widgets.forEach((w) => {
+      w.detach();
+    });
     this.widgets = [];
     this.screen.render();
   }

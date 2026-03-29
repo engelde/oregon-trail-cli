@@ -1,5 +1,3 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, tag, bold } = require('./Theme');
 

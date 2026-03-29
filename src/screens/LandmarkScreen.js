@@ -1,10 +1,10 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, tag, bold, boldColor } = require('../ui/Theme');
 
 let landmarkArt = {};
-try { landmarkArt = require('../art/landmarks').landmarks; } catch (_) {}
+try {
+  landmarkArt = require('../art/landmarks').landmarks;
+} catch (_) {}
 
 class LandmarkScreen {
   constructor(screen, gameState, onComplete, landmark) {
@@ -19,7 +19,10 @@ class LandmarkScreen {
     this.init();
   }
 
-  addWidget(w) { this.widgets.push(w); this.screen.append(w); }
+  addWidget(w) {
+    this.widgets.push(w);
+    this.screen.append(w);
+  }
 
   registerKey(keys, fn) {
     const handler = fn;
@@ -28,9 +31,9 @@ class LandmarkScreen {
   }
 
   destroy() {
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];
@@ -126,10 +129,7 @@ class LandmarkScreen {
 
   showDallesChoice() {
     this.selectedChoice = 0;
-    const choices = [
-      '1. Take the Barlow Toll Road ($20, safer)',
-      '2. Float down the Columbia River (risky but free)',
-    ];
+    const choices = ['1. Take the Barlow Toll Road ($20, safer)', '2. Float down the Columbia River (risky but free)'];
 
     this.choiceBox = blessed.box({
       top: 'center',

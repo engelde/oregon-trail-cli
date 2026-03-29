@@ -1,13 +1,19 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, tag, bold, boldColor } = require('../ui/Theme');
 
 let tombstoneArt = {};
-try { tombstoneArt = require('../art/tombstone'); } catch (_) { /* graceful fallback */ }
+try {
+  tombstoneArt = require('../art/tombstone');
+} catch (_) {
+  /* graceful fallback */
+}
 
 let miscArt = {};
-try { miscArt = require('../art/misc'); } catch (_) { /* graceful fallback */ }
+try {
+  miscArt = require('../art/misc');
+} catch (_) {
+  /* graceful fallback */
+}
 
 class DeathScreen {
   constructor(screen, props) {
@@ -33,8 +39,7 @@ class DeathScreen {
 
   _isGameOver() {
     const party = this.gameState.party;
-    const isLeader = party.length > 0 &&
-      (this.member === party[0] || this.member.name === party[0].name);
+    const isLeader = party.length > 0 && (this.member === party[0] || this.member.name === party[0].name);
     const nooneAlive = !this.gameState.isPartyAlive();
     return isLeader || nooneAlive;
   }
@@ -83,7 +88,7 @@ class DeathScreen {
     });
     this.addWidget(artBox);
 
-    let nextTop = stoneLines + 3;
+    const nextTop = stoneLines + 3;
 
     if (gameOver) {
       this._buildGameOverLayout(displayName, nextTop);
@@ -166,9 +171,7 @@ class DeathScreen {
   _buildMournLayout(displayName, top) {
     // Remaining alive members
     const alive = this.gameState.getAliveMembers();
-    const partyLines = alive.map(
-      m => `  ${tag(colors.text, m.name)}: ${this._healthTag(m.health)}`
-    );
+    const partyLines = alive.map((m) => `  ${tag(colors.text, m.name)}: ${this._healthTag(m.health)}`);
 
     const lines = [
       boldColor(colors.secondary, `${displayName} has died of ${this.cause}.`),
@@ -212,9 +215,9 @@ class DeathScreen {
   // ── Cleanup ───────────────────────────────────────────────────
 
   destroy() {
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];

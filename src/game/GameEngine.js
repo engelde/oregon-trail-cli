@@ -1,5 +1,3 @@
-'use strict';
-
 const landmarks = require('../data/landmarks');
 const EventEngine = require('./EventEngine');
 const WeatherSystem = require('./WeatherSystem');
@@ -118,34 +116,49 @@ class GameEngine {
 
   showLandmark(landmark) {
     this.state = 'landmark';
-    const s = new LandmarkScreen(this.screen, this.gs, (choice) => {
-      if (choice === 'columbia_river') {
-        this._launchRiverMiniGame(() => this._resumeTravel());
-      } else {
-        this._resumeTravel();
-      }
-    }, landmark);
+    const s = new LandmarkScreen(
+      this.screen,
+      this.gs,
+      (choice) => {
+        if (choice === 'columbia_river') {
+          this._launchRiverMiniGame(() => this._resumeTravel());
+        } else {
+          this._resumeTravel();
+        }
+      },
+      landmark,
+    );
     this._show(s);
   }
 
   showFort(landmark) {
     this.state = 'fort';
-    const s = new FortScreen(this.screen, this.gs, () => {
-      this._resumeTravel();
-    }, landmark);
+    const s = new FortScreen(
+      this.screen,
+      this.gs,
+      () => {
+        this._resumeTravel();
+      },
+      landmark,
+    );
     this._show(s);
   }
 
   showRiver(landmark) {
     this.state = 'river';
-    const s = new RiverScreen(this.screen, this.gs, (result) => {
-      if (result === 'raft') {
-        this._launchRiverMiniGame(() => this._resumeTravel());
-      } else {
-        // Check for deaths from crossing
-        this._checkPartyDeaths('drowning', () => this._resumeTravel());
-      }
-    }, landmark);
+    const s = new RiverScreen(
+      this.screen,
+      this.gs,
+      (result) => {
+        if (result === 'raft') {
+          this._launchRiverMiniGame(() => this._resumeTravel());
+        } else {
+          // Check for deaths from crossing
+          this._checkPartyDeaths('drowning', () => this._resumeTravel());
+        }
+      },
+      landmark,
+    );
     this._show(s);
   }
 
@@ -159,10 +172,15 @@ class GameEngine {
       type: event.type,
       effects: message,
     };
-    const s = new EventScreen(this.screen, this.gs, () => {
-      // After event, check for deaths then resume
-      this._checkPartyDeaths(event.name, () => this._resumeTravel());
-    }, eventData);
+    const s = new EventScreen(
+      this.screen,
+      this.gs,
+      () => {
+        // After event, check for deaths then resume
+        this._checkPartyDeaths(event.name, () => this._resumeTravel());
+      },
+      eventData,
+    );
     this._show(s);
   }
 
@@ -180,10 +198,12 @@ class GameEngine {
   showGameOver() {
     this.state = 'gameover';
     // Show death screen for the leader with game over
-    const showDialog = require('../ui/DialogBox');
+    const _showDialog = require('../ui/DialogBox');
     this._destroyCurrent();
     let miscArt = {};
-    try { miscArt = require('../art/misc'); } catch (_) {}
+    try {
+      miscArt = require('../art/misc');
+    } catch (_) {}
 
     const blessed = require('blessed');
     const box = blessed.box({
@@ -242,10 +262,17 @@ class GameEngine {
     // Calculate daily miles based on pace and weather
     let baseMiles;
     switch (this.gs.pace) {
-      case 'steady':    baseMiles = 12 + Math.floor(Math.random() * 6); break;
-      case 'strenuous': baseMiles = 16 + Math.floor(Math.random() * 8); break;
-      case 'grueling':  baseMiles = 20 + Math.floor(Math.random() * 10); break;
-      default:          baseMiles = 14;
+      case 'steady':
+        baseMiles = 12 + Math.floor(Math.random() * 6);
+        break;
+      case 'strenuous':
+        baseMiles = 16 + Math.floor(Math.random() * 8);
+        break;
+      case 'grueling':
+        baseMiles = 20 + Math.floor(Math.random() * 10);
+        break;
+      default:
+        baseMiles = 14;
     }
 
     // Weather speed modifier
@@ -418,7 +445,7 @@ class GameEngine {
   // ── Death checking ────────────────────────────────────────────
 
   _checkPartyDeaths(cause, onDone) {
-    const dead = this.gs.party.filter(m => m.health === 'dead' && !m._deathShown);
+    const dead = this.gs.party.filter((m) => m.health === 'dead' && !m._deathShown);
     if (dead.length === 0) {
       onDone();
       return;
@@ -434,7 +461,7 @@ class GameEngine {
   // ── Game reset ────────────────────────────────────────────────
 
   _resetGame() {
-    const GameState = require('./GameState');
+    const _GameState = require('./GameState');
     // Reset all state
     this.gs.party = [];
     this.gs.supplies = { food: 0, oxen: 0, clothing: 0, ammunition: 0, wheels: 0, axles: 0, tongues: 0 };

@@ -1,5 +1,3 @@
-'use strict';
-
 const events = require('../data/events');
 
 class EventEngine {
@@ -19,7 +17,7 @@ class EventEngine {
     const gs = this.gameState;
 
     // Step 1: base chance of ANY event occurring
-    let baseChance = 0.30;
+    let baseChance = 0.3;
     // Increase late-game and far from forts
     if (gs.milesTraveled > 1000) baseChance += 0.05;
     if (gs.pace === 'grueling') baseChance += 0.08;
@@ -29,7 +27,7 @@ class EventEngine {
     if (Math.random() > baseChance) return null;
 
     // Step 2: gather eligible events and pick one by weighted probability
-    const eligible = events.filter(e => {
+    const eligible = events.filter((e) => {
       if (typeof e.condition === 'function' && !e.condition(gs)) return false;
       if (this.recentEvents.includes(e.id)) return false; // skip recent
       return true;
@@ -41,7 +39,7 @@ class EventEngine {
     const totalWeight = eligible.reduce((sum, e) => sum + (e.probability || 0.01), 0);
     let roll = Math.random() * totalWeight;
     for (const event of eligible) {
-      roll -= (event.probability || 0.01);
+      roll -= event.probability || 0.01;
       if (roll <= 0) return event;
     }
 

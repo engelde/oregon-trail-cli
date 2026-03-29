@@ -1,12 +1,11 @@
-'use strict';
-
 const blessed = require('blessed');
-const { colors, tag, bold, boldColor } = require('../ui/Theme');
+const { colors, tag, boldColor } = require('../ui/Theme');
 
 const ANIMALS = {
   rabbit: {
     name: 'Rabbit',
-    width: 6, height: 2,
+    width: 6,
+    height: 2,
     art: ['(\\__/)', '(o.o )'],
     speed: 3,
     food: () => 2 + Math.floor(Math.random() * 4),
@@ -15,7 +14,8 @@ const ANIMALS = {
   },
   deer: {
     name: 'Deer',
-    width: 12, height: 3,
+    width: 12,
+    height: 3,
     art: ['  /|    |\\', ' / |    | \\', '/__|____|__\\'],
     speed: 2,
     food: () => 30 + Math.floor(Math.random() * 30),
@@ -24,7 +24,8 @@ const ANIMALS = {
   },
   buffalo: {
     name: 'Buffalo',
-    width: 16, height: 4,
+    width: 16,
+    height: 4,
     art: ['    __  ___', '   /  \\/   \\', '  |  ()  () |', '  \\________/'],
     speed: 1,
     food: () => 100 + Math.floor(Math.random() * 100),
@@ -33,7 +34,8 @@ const ANIMALS = {
   },
   bear: {
     name: 'Bear',
-    width: 14, height: 4,
+    width: 14,
+    height: 4,
     art: ['   _     _', '  / \\   / \\', ' | (o) (o) |', '  \\_______/'],
     speed: 1.5,
     food: () => 100 + Math.floor(Math.random() * 100),
@@ -67,7 +69,7 @@ class HuntingScreen {
 
     // Game state
     this.animals = [];
-    this.totalBullets = Math.max(1, (gameState.supplies.ammunition || 0)) * 20;
+    this.totalBullets = Math.max(1, gameState.supplies.ammunition || 0) * 20;
     this.bulletsUsed = 0;
     this.foodGathered = 0;
     this.animalsKilled = 0;
@@ -95,9 +97,9 @@ class HuntingScreen {
   }
 
   destroy() {
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];
@@ -165,9 +167,7 @@ class HuntingScreen {
     const cy = Math.floor(this.height / 2);
     const buffer = this.createEmptyBuffer();
 
-    const text = this.countdownValue > 0
-      ? `${this.countdownValue}...`
-      : 'HUNT!';
+    const text = this.countdownValue > 0 ? `${this.countdownValue}...` : 'HUNT!';
 
     this.writeToBuffer(buffer, cx - Math.floor(text.length / 2), cy, text);
     this.gameArea.setContent(this.bufferToString(buffer));
@@ -210,7 +210,7 @@ class HuntingScreen {
     this.moveAnimals();
 
     // Remove off-screen animals
-    this.animals = this.animals.filter(a => {
+    this.animals = this.animals.filter((a) => {
       if (a.direction === 1) return a.x < this.width + 5;
       return a.x + a.def.width > -5;
     });
@@ -223,7 +223,7 @@ class HuntingScreen {
     }
 
     // Expire flash messages
-    this.flashMessages = this.flashMessages.filter(f => now < f.expire);
+    this.flashMessages = this.flashMessages.filter((f) => now < f.expire);
 
     // Render
     this.renderFrame();
@@ -284,7 +284,9 @@ class HuntingScreen {
       this.addFlash('{red-fg}Out of ammo!{/red-fg}', this.crossX - 5, this.crossY - 2);
       this.renderFrame();
       // End game shortly after running out
-      setTimeout(() => { if (this.phase === 'playing') this.endGame(); }, 1000);
+      setTimeout(() => {
+        if (this.phase === 'playing') this.endGame();
+      }, 1000);
       return;
     }
 
@@ -297,8 +299,7 @@ class HuntingScreen {
 
     for (let i = this.animals.length - 1; i >= 0; i--) {
       const a = this.animals[i];
-      if (cx >= a.x && cx < a.x + a.def.width &&
-          cy >= a.y && cy < a.y + a.def.height) {
+      if (cx >= a.x && cx < a.x + a.def.width && cy >= a.y && cy < a.y + a.def.height) {
         // Hit!
         hit = true;
         const foodAmount = a.def.food();
@@ -307,12 +308,9 @@ class HuntingScreen {
         if (actualFood > 0) {
           this.foodGathered += actualFood;
           this.animalsKilled++;
-          this.addFlash(
-            `{green-fg}HIT! +${actualFood} lbs{/green-fg}`,
-            a.x, Math.max(0, a.y - 1)
-          );
+          this.addFlash(`{green-fg}HIT! +${actualFood} lbs{/green-fg}`, a.x, Math.max(0, a.y - 1));
         } else {
-          this.addFlash('{yellow-fg}HIT! Can\'t carry more{/yellow-fg}', a.x, Math.max(0, a.y - 1));
+          this.addFlash("{yellow-fg}HIT! Can't carry more{/yellow-fg}", a.x, Math.max(0, a.y - 1));
           this.animalsKilled++;
         }
 
@@ -328,7 +326,9 @@ class HuntingScreen {
     // Check if out of ammo after this shot
     if (this.totalBullets - this.bulletsUsed <= 0) {
       this.addFlash('{red-fg}Out of ammo!{/red-fg}', this.crossX - 5, this.crossY - 2);
-      setTimeout(() => { if (this.phase === 'playing') this.endGame(); }, 1200);
+      setTimeout(() => {
+        if (this.phase === 'playing') this.endGame();
+      }, 1200);
     }
 
     this.renderFrame();
@@ -366,7 +366,7 @@ class HuntingScreen {
   }
 
   bufferToString(buf) {
-    return buf.map(row => row.join('')).join('\n');
+    return buf.map((row) => row.join('')).join('\n');
   }
 
   renderFrame() {
@@ -396,7 +396,7 @@ class HuntingScreen {
     this.writeToBuffer(buf, this.crossX, this.crossY, '[+]');
 
     // Convert buffer to string, then overlay blessed color tags for flash messages
-    let frame = this.bufferToString(buf);
+    const frame = this.bufferToString(buf);
 
     // Add flash messages as tagged overlays (render below the frame)
     const flashLines = [];
@@ -462,7 +462,7 @@ class HuntingScreen {
     this.phase = 'results';
 
     // Stop all intervals
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.intervals = [];
 
     this.showResults();
@@ -504,10 +504,7 @@ class HuntingScreen {
     // Update game state
     this.gameState.supplies.food += foodCarried;
     const ammoUsedBoxes = Math.ceil(this.bulletsUsed / 20);
-    this.gameState.supplies.ammunition = Math.max(
-      0,
-      this.gameState.supplies.ammunition - ammoUsedBoxes
-    );
+    this.gameState.supplies.ammunition = Math.max(0, this.gameState.supplies.ammunition - ammoUsedBoxes);
 
     this.destroy();
     if (this.onComplete) this.onComplete(foodCarried);

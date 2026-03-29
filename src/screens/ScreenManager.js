@@ -1,5 +1,3 @@
-'use strict';
-
 class ScreenManager {
   constructor(screen) {
     this.screen = screen;

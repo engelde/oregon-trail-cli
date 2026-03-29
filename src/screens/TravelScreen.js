@@ -1,26 +1,32 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, tag, bold, boldColor } = require('../ui/Theme');
 const showDialog = require('../ui/DialogBox');
 
 let wagonFrames;
-try { ({ wagonFrames } = require('../art/wagon')); } catch (_) { wagonFrames = ['[====WAGON====]']; }
+try {
+  ({ wagonFrames } = require('../art/wagon'));
+} catch (_) {
+  wagonFrames = ['[====WAGON====]'];
+}
 
 let landmarks;
-try { landmarks = require('../data/landmarks'); } catch (_) { landmarks = []; }
+try {
+  landmarks = require('../data/landmarks');
+} catch (_) {
+  landmarks = [];
+}
 
 const TOTAL_MILES = 1907;
 
 const WEATHER_ICONS = {
-  clear:       '\u2600',  // ☀
-  'fair':      '\u263c',  // ☼
-  cloudy:      '\u2601',  // ☁
-  rain:        '\u2602',  // ☂
-  'heavy rain':'\u2614',  // ☔
-  snow:        '\u2744',  // ❄
-  fog:         '\u2248',  // ≈
-  hail:        '\u2022',  // •
+  clear: '\u2600', // ☀
+  fair: '\u263c', // ☼
+  cloudy: '\u2601', // ☁
+  rain: '\u2602', // ☂
+  'heavy rain': '\u2614', // ☔
+  snow: '\u2744', // ❄
+  fog: '\u2248', // ≈
+  hail: '\u2022', // •
 };
 
 // ── Pseudo-random seeded by position for stable scrolling ───────
@@ -53,17 +59,17 @@ function generateTerrain(miles, width, height) {
           line += '~';
         } else if (r >= height - 2) {
           // ground detail
-          if (v < 8)       line += '"';
+          if (v < 8) line += '"';
           else if (v < 14) line += ',';
-          else if (v < 18) line += '\'';
+          else if (v < 18) line += "'";
           else if (v < 22) line += '.';
           else if (v < 25) line += '`';
-          else              line += ' ';
+          else line += ' ';
         } else {
-          if (v < 5)       line += '.';
-          else if (v < 8)  line += ',';
-          else if (v < 10) line += '\'';
-          else              line += ' ';
+          if (v < 5) line += '.';
+          else if (v < 8) line += ',';
+          else if (v < 10) line += "'";
+          else line += ' ';
         }
       }
       if (r < 2) {
@@ -73,7 +79,6 @@ function generateTerrain(miles, width, height) {
       }
     }
     return lines.join('\n');
-
   } else if (miles < 640) {
     // ── Prairie / rolling hills (Nebraska) ──
     const horizon = Math.floor(height * 0.35);
@@ -88,17 +93,17 @@ function generateTerrain(miles, width, height) {
           line += ' ';
         } else if (r < horizon) {
           // rolling hill silhouette
-          const wave = Math.sin((wc) * 0.08) * 2 + Math.sin((wc) * 0.03) * 1.5;
+          const wave = Math.sin(wc * 0.08) * 2 + Math.sin(wc * 0.03) * 1.5;
           const hillRow = horizon - 1 - r;
           if (hillRow < wave) {
             if (v < 15) line += '.';
-            else         line += ' ';
+            else line += ' ';
           } else {
             line += ' ';
           }
         } else if (r === horizon) {
           // horizon line
-          const wave = Math.sin((wc) * 0.08) * 1;
+          const wave = Math.sin(wc * 0.08) * 1;
           if (wave > 0.3) {
             line += '_';
           } else if (v < 20) {
@@ -108,11 +113,11 @@ function generateTerrain(miles, width, height) {
           }
         } else {
           // grass
-          if (v < 6)       line += '"';
+          if (v < 6) line += '"';
           else if (v < 10) line += ',';
           else if (v < 13) line += '.';
-          else if (v < 15) line += '\'';
-          else              line += ' ';
+          else if (v < 15) line += "'";
+          else line += ' ';
         }
       }
       if (r < horizon) {
@@ -124,7 +129,6 @@ function generateTerrain(miles, width, height) {
       }
     }
     return lines.join('\n');
-
   } else if (miles < 1025) {
     // ── Rocky Mountains (Wyoming) ──
     const skyH = Math.floor(height * 0.15);
@@ -139,7 +143,7 @@ function generateTerrain(miles, width, height) {
     }
 
     for (let r = 0; r < height; r++) {
-      let chars = [];
+      const chars = [];
       for (let c = 0; c < width; c++) {
         const wc = c + scroll;
         const h = _hash(wc, r, 3);
@@ -165,21 +169,22 @@ function generateTerrain(miles, width, height) {
           }
 
           if (isEdge) {
-            chars.push({ ch: c < (peaks.find(p => Math.abs(c - p.x) === (p.h - mtnRow))?.x || c) ? '/' : '\\', color: isSnow ? 'white' : 'gray' });
+            chars.push({
+              ch: c < (peaks.find((p) => Math.abs(c - p.x) === p.h - mtnRow)?.x || c) ? '/' : '\\',
+              color: isSnow ? 'white' : 'gray',
+            });
           } else if (inMtn) {
-            const mc = isSnow
-              ? (v < 30 ? '^' : v < 50 ? '*' : ' ')
-              : (v < 10 ? '.' : v < 15 ? ':' : ' ');
+            const mc = isSnow ? (v < 30 ? '^' : v < 50 ? '*' : ' ') : v < 10 ? '.' : v < 15 ? ':' : ' ';
             chars.push({ ch: mc, color: isSnow ? 'white' : 'gray' });
           } else {
             chars.push({ ch: ' ', color: null });
           }
         } else {
           // Foothills/scrub
-          if (v < 4)       chars.push({ ch: '.', color: 'green' });
-          else if (v < 7)  chars.push({ ch: ',', color: 'green' });
-          else if (v < 9)  chars.push({ ch: '~', color: 'yellow' });
-          else              chars.push({ ch: ' ', color: null });
+          if (v < 4) chars.push({ ch: '.', color: 'green' });
+          else if (v < 7) chars.push({ ch: ',', color: 'green' });
+          else if (v < 9) chars.push({ ch: '~', color: 'yellow' });
+          else chars.push({ ch: ' ', color: null });
         }
       }
 
@@ -198,7 +203,6 @@ function generateTerrain(miles, width, height) {
       lines.push(line);
     }
     return lines.join('\n');
-
   } else if (miles < 1340) {
     // ── High desert / volcanic plateau (Idaho) ──
     const skyH = Math.floor(height * 0.25);
@@ -217,12 +221,13 @@ function generateTerrain(miles, width, height) {
           line += mesa > 0.2 ? '_' : mesa > -0.1 ? '-' : ' ';
         } else {
           // desert floor
-          if (v < 3)       line += '.';
-          else if (v < 5)  line += ',';
-          else if (v < 7)  line += 'v';  // sagebrush
-          else if (v < 8)  line += '~';
-          else if (v < 9)  line += ':';
-          else              line += ' ';
+          if (v < 3) line += '.';
+          else if (v < 5) line += ',';
+          else if (v < 7)
+            line += 'v'; // sagebrush
+          else if (v < 8) line += '~';
+          else if (v < 9) line += ':';
+          else line += ' ';
         }
       }
       if (r <= skyH) {
@@ -232,7 +237,6 @@ function generateTerrain(miles, width, height) {
       }
     }
     return lines.join('\n');
-
   } else if (miles < 1630) {
     // ── Forest & mountains (Blue Mountains, Oregon) ──
     const skyH = Math.floor(height * 0.2);
@@ -255,19 +259,20 @@ function generateTerrain(miles, width, height) {
           }
         } else if (r < skyH + treeZone) {
           // dense forest
-          if (v < 12)      line += '\u2191';  // ↑ trees
+          if (v < 12)
+            line += '\u2191'; // ↑ trees
           else if (v < 20) line += '|';
           else if (v < 25) line += '/';
           else if (v < 28) line += '\\';
           else if (v < 32) line += '.';
-          else              line += ' ';
+          else line += ' ';
         } else {
           // forest floor
-          if (v < 8)       line += ',';
+          if (v < 8) line += ',';
           else if (v < 14) line += '.';
-          else if (v < 18) line += '\'';
+          else if (v < 18) line += "'";
           else if (v < 20) line += '"';
-          else              line += ' ';
+          else line += ' ';
         }
       }
       if (r < skyH) {
@@ -277,7 +282,6 @@ function generateTerrain(miles, width, height) {
       }
     }
     return lines.join('\n');
-
   } else {
     // ── Lush Willamette Valley (Oregon) ──
     const skyH = Math.floor(height * 0.2);
@@ -291,22 +295,23 @@ function generateTerrain(miles, width, height) {
         if (r < skyH) {
           // light clouds and birds
           if (v < 2) line += '~';
-          else        line += ' ';
+          else line += ' ';
         } else if (r === skyH) {
           // gentle tree line
-          if (v < 15)      line += '\u2191';  // ↑
+          if (v < 15)
+            line += '\u2191'; // ↑
           else if (v < 22) line += '|';
           else if (v < 28) line += '/';
           else if (v < 33) line += '\\';
-          else              line += ' ';
+          else line += ' ';
         } else {
           // lush meadow
-          if (v < 10)      line += '"';
+          if (v < 10) line += '"';
           else if (v < 18) line += ',';
           else if (v < 24) line += '.';
-          else if (v < 28) line += '\'';
+          else if (v < 28) line += "'";
           else if (v < 31) line += '`';
-          else              line += ' ';
+          else line += ' ';
         }
       }
       if (r < skyH) {
@@ -351,7 +356,7 @@ class TravelScreen {
     this._dialogHandle = null;
 
     // Support both ScreenManager pattern (screen, props) and direct (screen, gameState, callbacks)
-    if (propsOrGameState && propsOrGameState.engine) {
+    if (propsOrGameState?.engine) {
       this.engine = propsOrGameState.engine;
       this.gameState = propsOrGameState.gameState;
       this.callbacks = propsOrGameState.callbacks || null;
@@ -454,7 +459,7 @@ class TravelScreen {
 
   destroy() {
     this.stopTravel();
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     if (this._tickHandler) {
       this.screen.removeListener('tick', this._tickHandler);
       this._tickHandler = null;
@@ -465,7 +470,7 @@ class TravelScreen {
       this._dialogHandle = null;
     }
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];
@@ -480,7 +485,7 @@ class TravelScreen {
     this.menuVisible = false;
     this._cleanupMenu();
 
-    if (this.callbacks && this.callbacks.onTick) {
+    if (this.callbacks?.onTick) {
       // Self-managed travel loop via callbacks
       this._travelInterval = setInterval(() => {
         const result = this.callbacks.onTick();
@@ -520,12 +525,12 @@ class TravelScreen {
     // Clear travel-specific intervals
     if (this._travelInterval) {
       clearInterval(this._travelInterval);
-      this.intervals = this.intervals.filter(i => i !== this._travelInterval);
+      this.intervals = this.intervals.filter((i) => i !== this._travelInterval);
       this._travelInterval = null;
     }
     if (this._animInterval) {
       clearInterval(this._animInterval);
-      this.intervals = this.intervals.filter(i => i !== this._animInterval);
+      this.intervals = this.intervals.filter((i) => i !== this._animInterval);
       this._animInterval = null;
     }
 
@@ -559,9 +564,7 @@ class TravelScreen {
     const terrain = generateTerrain(miles, w, terrainH);
 
     // Compose: terrain on top, wagon below
-    const content = terrain + '\n' + (this.traveling
-      ? (wagonFrames[this.wagonFrame] || wagonFrames[0])
-      : wagonFrames[0]);
+    const content = terrain + '\n' + (this.traveling ? wagonFrames[this.wagonFrame] || wagonFrames[0] : wagonFrames[0]);
 
     this.terrainBox.setContent(content);
   }
@@ -571,21 +574,25 @@ class TravelScreen {
     const healthStatus = gs.getHealthStatus();
 
     // Health with contextual color
-    const healthColor = healthStatus === 'good' ? colors.primary
-      : healthStatus === 'fair' ? colors.secondary
-      : colors.danger;
-    const healthText = healthStatus === 'very poor'
-      ? boldColor(colors.danger, 'Very Poor')
-      : tag(healthColor, healthStatus.charAt(0).toUpperCase() + healthStatus.slice(1));
+    const healthColor =
+      healthStatus === 'good' ? colors.primary : healthStatus === 'fair' ? colors.secondary : colors.danger;
+    const healthText =
+      healthStatus === 'very poor'
+        ? boldColor(colors.danger, 'Very Poor')
+        : tag(healthColor, healthStatus.charAt(0).toUpperCase() + healthStatus.slice(1));
 
     // Weather with icon
-    const weather = (gs.weather || 'clear');
+    const weather = gs.weather || 'clear';
     const weatherCap = weather.charAt(0).toUpperCase() + weather.slice(1);
     const weatherIcon = WEATHER_ICONS[weather] || WEATHER_ICONS.clear;
-    const weatherColor = (weather === 'rain' || weather === 'heavy rain') ? colors.water
-      : weather === 'snow' ? 'white'
-      : weather === 'clear' || weather === 'fair' ? colors.secondary
-      : colors.muted;
+    const weatherColor =
+      weather === 'rain' || weather === 'heavy rain'
+        ? colors.water
+        : weather === 'snow'
+          ? 'white'
+          : weather === 'clear' || weather === 'fair'
+            ? colors.secondary
+            : colors.muted;
 
     // Next landmark
     let nextLandmarkText = tag(colors.muted, 'None');
@@ -597,9 +604,8 @@ class TravelScreen {
 
     const paceDisplay = gs.pace.charAt(0).toUpperCase() + gs.pace.slice(1);
     const rationsDisplay = gs.rations.charAt(0).toUpperCase() + gs.rations.slice(1);
-    const foodColor = gs.supplies.food < 50 ? colors.danger
-      : gs.supplies.food < 150 ? colors.secondary
-      : colors.primary;
+    const foodColor =
+      gs.supplies.food < 50 ? colors.danger : gs.supplies.food < 150 ? colors.secondary : colors.primary;
 
     const bar = progressBar(gs.milesTraveled, TOTAL_MILES, 30);
 
@@ -613,9 +619,13 @@ class TravelScreen {
     // Only add progress bar if we have room
     const sw = (this.statusBox.width || 80) - 4;
     if (sw >= 50) {
-      statusLines.push(`${tag(colors.muted, 'Miles traveled:')} ${boldColor(colors.secondary, String(gs.milesTraveled))} ${tag(colors.muted, '/ ' + TOTAL_MILES)}  ${bar}`);
+      statusLines.push(
+        `${tag(colors.muted, 'Miles traveled:')} ${boldColor(colors.secondary, String(gs.milesTraveled))} ${tag(colors.muted, '/ ' + TOTAL_MILES)}  ${bar}`,
+      );
     } else {
-      statusLines.push(`${tag(colors.muted, 'Miles:')} ${boldColor(colors.secondary, String(gs.milesTraveled))} ${tag(colors.muted, '/ ' + TOTAL_MILES)}`);
+      statusLines.push(
+        `${tag(colors.muted, 'Miles:')} ${boldColor(colors.secondary, String(gs.milesTraveled))} ${tag(colors.muted, '/ ' + TOTAL_MILES)}`,
+      );
     }
 
     this.statusBox.setContent(statusLines.join('\n'));
@@ -627,7 +637,7 @@ class TravelScreen {
     this.menuVisible = false;
     this._cleanupMenu();
     this.bottomBox.setContent(
-      `\n  ${tag(colors.muted, 'Press')} ${boldColor(colors.highlight, 'SPACE')} ${tag(colors.muted, 'to stop and access trail menu')}`
+      `\n  ${tag(colors.muted, 'Press')} ${boldColor(colors.highlight, 'SPACE')} ${tag(colors.muted, 'to stop and access trail menu')}`,
     );
   }
 
@@ -724,7 +734,7 @@ class TravelScreen {
     for (const { ref, keys } of handlers) {
       if (this[ref]) {
         this.screen.unkey(keys, this[ref]);
-        this.keyHandlers = this.keyHandlers.filter(k => k.handler !== this[ref]);
+        this.keyHandlers = this.keyHandlers.filter((k) => k.handler !== this[ref]);
         this[ref] = null;
       }
     }
@@ -737,20 +747,29 @@ class TravelScreen {
     this._cleanupMenu();
 
     switch (index) {
-      case 0: return this._doContinue();
-      case 1: return this._showSupplies();
-      case 2: return this._showMap();
-      case 3: return this._changePace();
-      case 4: return this._changeRations();
-      case 5: return this._stopToRest();
-      case 6: return this._attemptTrade();
-      case 7: return this._huntForFood();
-      default: return this._doContinue();
+      case 0:
+        return this._doContinue();
+      case 1:
+        return this._showSupplies();
+      case 2:
+        return this._showMap();
+      case 3:
+        return this._changePace();
+      case 4:
+        return this._changeRations();
+      case 5:
+        return this._stopToRest();
+      case 6:
+        return this._attemptTrade();
+      case 7:
+        return this._huntForFood();
+      default:
+        return this._doContinue();
     }
   }
 
   _doContinue() {
-    if (this.callbacks && this.callbacks.onContinue) {
+    if (this.callbacks?.onContinue) {
       this.callbacks.onContinue();
     }
     this.startTravel();
@@ -789,14 +808,12 @@ class TravelScreen {
       const passed = miles >= lm.mile;
       const isNext = i === nextIdx;
       const marker = passed
-        ? tag(colors.primary, '\u2713')          // ✓
+        ? tag(colors.primary, '\u2713') // ✓
         : isNext
           ? boldColor(colors.highlight, '\u25b6') // ▶
-          : tag(colors.muted, '\u00b7');           // ·
+          : tag(colors.muted, '\u00b7'); // ·
 
-      const nameColor = isNext ? colors.highlight
-        : passed ? colors.primary
-        : colors.muted;
+      const nameColor = isNext ? colors.highlight : passed ? colors.primary : colors.muted;
 
       const pointer = isNext ? boldColor(colors.highlight, ' \u25c4 NEXT') : '';
       const mileStr = tag(colors.muted, 'mi ' + String(lm.mile).padStart(5));
@@ -878,7 +895,7 @@ class TravelScreen {
         if (index !== null && index < 9) {
           const days = index + 1;
 
-          if (this.callbacks && this.callbacks.onRest) {
+          if (this.callbacks?.onRest) {
             this.callbacks.onRest(days);
           } else {
             // Default behaviour: advance days and consume food
@@ -906,7 +923,7 @@ class TravelScreen {
   }
 
   _attemptTrade() {
-    if (this.callbacks && this.callbacks.onTrade) {
+    if (this.callbacks?.onTrade) {
       this.callbacks.onTrade();
       return;
     }
@@ -920,14 +937,17 @@ class TravelScreen {
       this._dialogHandle = showDialog(this.screen, {
         title: ' Trade ',
         message: tag(colors.muted, 'No one in the area wants to trade right now.'),
-        callback: () => { this._dialogHandle = null; this.showMenu(); },
+        callback: () => {
+          this._dialogHandle = null;
+          this.showMenu();
+        },
       });
       return;
     }
 
     const offerAmount = 10 + Math.floor(Math.random() * 40);
     const wantAmount = 10 + Math.floor(Math.random() * 40);
-    const unit = (item) => item === 'food' ? ' lbs' : item === 'ammunition' ? ' boxes' : ' sets';
+    const unit = (item) => (item === 'food' ? ' lbs' : item === 'ammunition' ? ' boxes' : ' sets');
 
     this._dialogHandle = showDialog(this.screen, {
       title: ' Trade Offer ',
@@ -947,14 +967,23 @@ class TravelScreen {
             this.updateDisplay(this.gameState);
             this._dialogHandle = showDialog(this.screen, {
               title: ' Trade Complete ',
-              message: tag(colors.primary, `Traded ${offerAmount}${unit(offerItem)} of ${offerItem} for ${wantAmount}${unit(wantItem)} of ${wantItem}.`),
-              callback: () => { this._dialogHandle = null; this.showMenu(); },
+              message: tag(
+                colors.primary,
+                `Traded ${offerAmount}${unit(offerItem)} of ${offerItem} for ${wantAmount}${unit(wantItem)} of ${wantItem}.`,
+              ),
+              callback: () => {
+                this._dialogHandle = null;
+                this.showMenu();
+              },
             });
           } else {
             this._dialogHandle = showDialog(this.screen, {
               title: ' Trade Failed ',
               message: tag(colors.danger, `You don't have enough ${offerItem} for this trade.`),
-              callback: () => { this._dialogHandle = null; this.showMenu(); },
+              callback: () => {
+                this._dialogHandle = null;
+                this.showMenu();
+              },
             });
           }
           return;
@@ -965,7 +994,7 @@ class TravelScreen {
   }
 
   _huntForFood() {
-    if (this.callbacks && this.callbacks.onHunt) {
+    if (this.callbacks?.onHunt) {
       this.callbacks.onHunt();
       return;
     }
@@ -973,8 +1002,11 @@ class TravelScreen {
     if (this.gameState.supplies.ammunition <= 0) {
       this._dialogHandle = showDialog(this.screen, {
         title: ' Hunt ',
-        message: tag(colors.danger, 'You don\'t have any ammunition to hunt with.'),
-        callback: () => { this._dialogHandle = null; this.showMenu(); },
+        message: tag(colors.danger, "You don't have any ammunition to hunt with."),
+        callback: () => {
+          this._dialogHandle = null;
+          this.showMenu();
+        },
       });
       return;
     }
@@ -989,7 +1021,10 @@ class TravelScreen {
         this._dialogHandle = showDialog(this.screen, {
           title: ' Hunt Complete ',
           message: `You brought back ${boldColor(colors.primary, foodGathered + ' lbs')} of food.`,
-          callback: () => { this._dialogHandle = null; this.showMenu(); },
+          callback: () => {
+            this._dialogHandle = null;
+            this.showMenu();
+          },
         });
       });
     } catch (_) {

@@ -1,11 +1,10 @@
-'use strict';
-
 const landmarks = [
   {
     name: 'Independence, MO',
     mile: 0,
     type: 'start',
-    description: 'The jumping-off point for thousands of emigrants heading west. Outfitters line the streets selling supplies for the journey ahead.',
+    description:
+      'The jumping-off point for thousands of emigrants heading west. Outfitters line the streets selling supplies for the journey ahead.',
     hasStore: true,
     riverData: null,
   },
@@ -13,7 +12,8 @@ const landmarks = [
     name: 'Kansas River Crossing',
     mile: 102,
     type: 'river',
-    description: 'The Kansas River, known as the Kaw, is the first major river crossing. A ferry operates here when water is high.',
+    description:
+      'The Kansas River, known as the Kaw, is the first major river crossing. A ferry operates here when water is high.',
     hasStore: false,
     riverData: {
       depth: [2, 5],
@@ -43,7 +43,8 @@ const landmarks = [
     name: 'Fort Kearney',
     mile: 304,
     type: 'fort',
-    description: 'A U.S. Army outpost established in 1848 to protect emigrants on the Oregon Trail. The post sutler sells supplies at frontier prices.',
+    description:
+      'A U.S. Army outpost established in 1848 to protect emigrants on the Oregon Trail. The post sutler sells supplies at frontier prices.',
     hasStore: true,
     riverData: null,
   },
@@ -51,7 +52,8 @@ const landmarks = [
     name: 'Chimney Rock',
     mile: 554,
     type: 'landmark',
-    description: 'This towering natural spire of clay and sandstone rises nearly 300 feet above the North Platte River valley. Emigrants carved their names into its base.',
+    description:
+      'This towering natural spire of clay and sandstone rises nearly 300 feet above the North Platte River valley. Emigrants carved their names into its base.',
     hasStore: false,
     riverData: null,
   },
@@ -59,7 +61,8 @@ const landmarks = [
     name: 'Fort Laramie',
     mile: 640,
     type: 'fort',
-    description: 'Originally a fur trading post, Fort Laramie became a vital resupply point where the plains give way to the Rocky Mountain foothills.',
+    description:
+      'Originally a fur trading post, Fort Laramie became a vital resupply point where the plains give way to the Rocky Mountain foothills.',
     hasStore: true,
     riverData: null,
   },
@@ -67,7 +70,8 @@ const landmarks = [
     name: 'Independence Rock',
     mile: 830,
     type: 'landmark',
-    description: 'A massive granite boulder along the Sweetwater River. Emigrants tried to reach it by the Fourth of July to stay on schedule for Oregon.',
+    description:
+      'A massive granite boulder along the Sweetwater River. Emigrants tried to reach it by the Fourth of July to stay on schedule for Oregon.',
     hasStore: false,
     riverData: null,
   },
@@ -75,7 +79,8 @@ const landmarks = [
     name: 'South Pass',
     mile: 932,
     type: 'landmark',
-    description: 'A broad, gentle pass through the Rocky Mountains at 7,550 feet. The Continental Divide crossing is so gradual many emigrants missed it entirely.',
+    description:
+      'A broad, gentle pass through the Rocky Mountains at 7,550 feet. The Continental Divide crossing is so gradual many emigrants missed it entirely.',
     hasStore: false,
     riverData: null,
   },
@@ -83,7 +88,8 @@ const landmarks = [
     name: 'Green River Crossing',
     mile: 985,
     type: 'river',
-    description: 'The Green River runs cold and fast through a deep canyon. Mountain men operate ferries here during peak emigration season.',
+    description:
+      'The Green River runs cold and fast through a deep canyon. Mountain men operate ferries here during peak emigration season.',
     hasStore: false,
     riverData: {
       depth: [4, 10],
@@ -98,7 +104,8 @@ const landmarks = [
     name: 'Fort Bridger',
     mile: 1025,
     type: 'fort',
-    description: 'Jim Bridger\'s trading post sits in a lush valley along Black\'s Fork. A welcome rest before the barren stretches of the trail ahead.',
+    description:
+      "Jim Bridger's trading post sits in a lush valley along Black's Fork. A welcome rest before the barren stretches of the trail ahead.",
     hasStore: true,
     riverData: null,
   },
@@ -106,7 +113,8 @@ const landmarks = [
     name: 'Soda Springs',
     mile: 1130,
     type: 'landmark',
-    description: 'Natural carbonated springs bubble up from the earth here. Emigrants marveled at the fizzing water and used it to make bread rise.',
+    description:
+      'Natural carbonated springs bubble up from the earth here. Emigrants marveled at the fizzing water and used it to make bread rise.',
     hasStore: false,
     riverData: null,
   },
@@ -114,7 +122,8 @@ const landmarks = [
     name: 'Fort Hall',
     mile: 1170,
     type: 'fort',
-    description: 'A Hudson\'s Bay Company trading post near the Snake River. Here the trail to California branches south while the Oregon Trail continues northwest.',
+    description:
+      "A Hudson's Bay Company trading post near the Snake River. Here the trail to California branches south while the Oregon Trail continues northwest.",
     hasStore: true,
     riverData: null,
   },
@@ -122,7 +131,8 @@ const landmarks = [
     name: 'Snake River Crossing',
     mile: 1340,
     type: 'river',
-    description: 'The Snake River carves a deep canyon through volcanic rock. Its swift current and hidden rocks make this one of the most treacherous crossings on the trail.',
+    description:
+      'The Snake River carves a deep canyon through volcanic rock. Its swift current and hidden rocks make this one of the most treacherous crossings on the trail.',
     hasStore: false,
     riverData: {
       depth: [6, 15],
@@ -137,7 +147,8 @@ const landmarks = [
     name: 'Fort Boise',
     mile: 1534,
     type: 'fort',
-    description: 'Another Hudson\'s Bay Company post along the Snake River. The last reliable supply point before the difficult Blue Mountains crossing.',
+    description:
+      "Another Hudson's Bay Company post along the Snake River. The last reliable supply point before the difficult Blue Mountains crossing.",
     hasStore: true,
     riverData: null,
   },
@@ -145,7 +156,8 @@ const landmarks = [
     name: 'Blue Mountains',
     mile: 1630,
     type: 'landmark',
-    description: 'Steep, forested mountains that exhausted already weary oxen and emigrants. The narrow, rocky trail tested every wagon to its limits.',
+    description:
+      'Steep, forested mountains that exhausted already weary oxen and emigrants. The narrow, rocky trail tested every wagon to its limits.',
     hasStore: false,
     riverData: null,
   },
@@ -153,7 +165,8 @@ const landmarks = [
     name: 'The Dalles',
     mile: 1770,
     type: 'choice',
-    description: 'The end of the overland trail. Emigrants must choose: risk the treacherous Columbia River rapids by raft, or take the rugged Barlow Toll Road over Mount Hood.',
+    description:
+      'The end of the overland trail. Emigrants must choose: risk the treacherous Columbia River rapids by raft, or take the rugged Barlow Toll Road over Mount Hood.',
     hasStore: false,
     riverData: null,
   },
@@ -161,7 +174,8 @@ const landmarks = [
     name: 'Willamette Valley (Oregon City)',
     mile: 1907,
     type: 'end',
-    description: 'The promised land! Oregon City sits at the falls of the Willamette River. Rich farmland stretches in every direction, the reward for months of hardship.',
+    description:
+      'The promised land! Oregon City sits at the falls of the Willamette River. Rich farmland stretches in every direction, the reward for months of hardship.',
     hasStore: false,
     riverData: null,
   },

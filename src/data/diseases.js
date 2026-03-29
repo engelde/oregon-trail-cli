@@ -1,25 +1,23 @@
-'use strict';
-
 const diseases = {
   cholera: {
     name: 'cholera',
     severity: 'severe',
     daysToRecover: [5, 12],
-    deathChance: 0.40,
+    deathChance: 0.4,
     restBonus: 0.3,
   },
   dysentery: {
     name: 'dysentery',
     severity: 'moderate',
     daysToRecover: [3, 8],
-    deathChance: 0.20,
+    deathChance: 0.2,
     restBonus: 0.25,
   },
   typhoid: {
     name: 'typhoid fever',
     severity: 'severe',
     daysToRecover: [7, 14],
-    deathChance: 0.30,
+    deathChance: 0.3,
     restBonus: 0.3,
   },
   measles: {

@@ -1,15 +1,13 @@
-'use strict';
-
 // ── Color palette ────────────────────────────────────────────────
 const colors = {
-  primary:   'green',
+  primary: 'green',
   secondary: 'yellow',
-  danger:    'red',
-  water:     'blue',
-  text:      'white',
-  bg:        'black',
-  muted:     'gray',
-  success:   'bright-green',
+  danger: 'red',
+  water: 'blue',
+  text: 'white',
+  bg: 'black',
+  muted: 'gray',
+  success: 'bright-green',
   highlight: 'cyan',
 };
 

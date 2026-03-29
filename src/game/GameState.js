@@ -1,8 +1,16 @@
-'use strict';
-
 const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -27,7 +35,7 @@ class GameState {
     this.date = { month: 3, day: 1, year: 1848 }; // March 1, 1848
 
     this.milesTraveled = 0;
-    this.pace = 'steady';     // 'steady' | 'strenuous' | 'grueling'
+    this.pace = 'steady'; // 'steady' | 'strenuous' | 'grueling'
     this.rations = 'filling'; // 'filling' | 'meager' | 'bare-bones'
 
     this.nextLandmarkIndex = 0;
@@ -68,10 +76,17 @@ class GameState {
     const alive = this.getLivingCount();
     let poundsPerPerson;
     switch (this.rations) {
-      case 'filling':    poundsPerPerson = 3; break;
-      case 'meager':     poundsPerPerson = 2; break;
-      case 'bare-bones': poundsPerPerson = 1; break;
-      default:           poundsPerPerson = 3;
+      case 'filling':
+        poundsPerPerson = 3;
+        break;
+      case 'meager':
+        poundsPerPerson = 2;
+        break;
+      case 'bare-bones':
+        poundsPerPerson = 1;
+        break;
+      default:
+        poundsPerPerson = 3;
     }
     const consumed = alive * poundsPerPerson;
     this.supplies.food = Math.max(0, this.supplies.food - consumed);
@@ -116,10 +131,14 @@ class GameState {
    */
   getProfessionMultiplier() {
     switch (this.profession) {
-      case 'banker':    return 1;
-      case 'carpenter': return 2;
-      case 'farmer':    return 3;
-      default:          return 1;
+      case 'banker':
+        return 1;
+      case 'carpenter':
+        return 2;
+      case 'farmer':
+        return 3;
+      default:
+        return 1;
     }
   }
 }

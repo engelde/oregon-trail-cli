@@ -1,5 +1,3 @@
-'use strict';
-
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -9,7 +7,7 @@ function pickRandom(arr) {
 }
 
 function getAlive(gs) {
-  return gs.party.filter(m => m.health !== 'dead');
+  return gs.party.filter((m) => m.health !== 'dead');
 }
 
 function damageHp(member, amount) {
@@ -106,7 +104,7 @@ const events = [
         }
       }
       gs.supplies.water = Math.max(0, (gs.supplies.water || 0) - 5);
-      return 'Sweltering heat! The blazing sun saps everyone\'s strength.';
+      return "Sweltering heat! The blazing sun saps everyone's strength.";
     },
     condition(gs) {
       const m = gs.date ? gs.date.month - 1 : 3;
@@ -153,7 +151,7 @@ const events = [
       const alive = getAlive(gs);
       if (alive.length === 0) return 'No one in the party is affected.';
       const victim = pickRandom(alive);
-      if (Math.random() < 0.40) {
+      if (Math.random() < 0.4) {
         killMember(victim, 'cholera');
         return `${victim.name} has died of cholera.`;
       }
@@ -173,7 +171,7 @@ const events = [
       const alive = getAlive(gs);
       if (alive.length === 0) return 'No one in the party is affected.';
       const victim = pickRandom(alive);
-      if (Math.random() < 0.20) {
+      if (Math.random() < 0.2) {
         killMember(victim, 'dysentery');
         return `${victim.name} has died of dysentery.`;
       }
@@ -193,7 +191,7 @@ const events = [
       const alive = getAlive(gs);
       if (alive.length === 0) return 'No one in the party is affected.';
       const victim = pickRandom(alive);
-      if (Math.random() < 0.30) {
+      if (Math.random() < 0.3) {
         killMember(victim, 'typhoid fever');
         return `${victim.name} has died of typhoid fever.`;
       }
@@ -260,14 +258,14 @@ const events = [
       damageHp(victim, 0.3 + Math.random() * 0.3);
       victim.illness = 'brokenArm';
       victim.illnessDays = randInt(5, 15);
-      return `${victim.name} has broken their arm. They can\'t help with camp duties.`;
+      return `${victim.name} has broken their arm. They can't help with camp duties.`;
     },
   },
   {
     id: 'broken_leg',
     type: 'health',
     name: 'Broken Leg',
-    description: 'A wagon wheel rolls over someone\'s leg, breaking it badly.',
+    description: "A wagon wheel rolls over someone's leg, breaking it badly.",
     probability: 0.015,
     effect(gs) {
       const alive = getAlive(gs);
@@ -586,8 +584,24 @@ const events = [
     description: 'A lonely wooden marker stands by the trail, weathered by wind and sun.',
     probability: 0.06,
     effect(gs) {
-      const names = ['Mary Henderson', 'James Polk', 'Sarah Mitchell', 'William Cooper', 'little Eliza', 'Thomas Gray', 'Margaret White', 'an unknown traveler'];
-      const causes = ['cholera', 'fever', 'drowning at a river crossing', 'an accidental gunshot', 'dysentery', 'exposure'];
+      const names = [
+        'Mary Henderson',
+        'James Polk',
+        'Sarah Mitchell',
+        'William Cooper',
+        'little Eliza',
+        'Thomas Gray',
+        'Margaret White',
+        'an unknown traveler',
+      ];
+      const causes = [
+        'cholera',
+        'fever',
+        'drowning at a river crossing',
+        'an accidental gunshot',
+        'dysentery',
+        'exposure',
+      ];
       const name = pickRandom(names);
       const cause = pickRandom(causes);
       for (const member of gs.party) {

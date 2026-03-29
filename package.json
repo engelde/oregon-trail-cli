@@ -9,6 +9,9 @@
   },
   "scripts": {
     "start": "node bin/oregon-trail.js",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
     "test": "node --test test/"
   },
   "keywords": [
@@ -27,5 +30,8 @@
   },
   "dependencies": {
     "blessed": "^0.1.81"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.9"
   }
 }

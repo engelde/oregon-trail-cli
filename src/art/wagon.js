@@ -33,7 +33,7 @@ const wagonFrames = [
 {white-fg}      ||    ||  {/white-fg}{yellow-fg}  [  {bold}OREGON{/bold}  ]  {/yellow-fg}
 {white-fg}     /|   /|    {/white-fg}{yellow-fg}  [___________]  {/yellow-fg}
 {white-fg}    / |  / |    {/white-fg}{yellow-fg}  ({white-fg}o{yellow-fg}-\\--/)-({white-fg}o{yellow-fg}-\\--/){/yellow-fg}
-{green-fg}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{/green-fg}`
+{green-fg}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{/green-fg}`,
 ];
 
 const wagonSmall = `{yellow-fg} _.---._  {/yellow-fg}{white-fg}o o{/white-fg}

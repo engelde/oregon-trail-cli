@@ -1,10 +1,8 @@
-'use strict';
-
 const blessed = require('blessed');
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const { colors, tag, bold, boldColor } = require('../ui/Theme');
+const fs = require('node:fs');
+const path = require('node:path');
+const os = require('node:os');
+const { colors, tag, boldColor } = require('../ui/Theme');
 
 // ── High-score persistence ───────────────────────────────────────
 const SCORES_DIR = path.join(os.homedir(), '.oregon-trail');
@@ -16,7 +14,7 @@ function loadScores() {
     const data = fs.readFileSync(SCORES_FILE, 'utf8');
     const parsed = JSON.parse(data);
     return Array.isArray(parsed) ? parsed : [];
-  } catch (e) {
+  } catch (_e) {
     return [];
   }
 }
@@ -27,7 +25,7 @@ function saveScores(scores) {
       fs.mkdirSync(SCORES_DIR, { recursive: true });
     }
     fs.writeFileSync(SCORES_FILE, JSON.stringify(scores, null, 2));
-  } catch (e) {
+  } catch (_e) {
     // Silently fail — high scores are not critical
   }
 }
@@ -80,7 +78,7 @@ class HighScoreScreen {
 
       // Find the new entry in the sorted list
       highlightIndex = scores.findIndex(
-        (e) => e.score === newEntry.score && e.name === newEntry.name && e.date === newEntry.date
+        (e) => e.score === newEntry.score && e.name === newEntry.name && e.date === newEntry.date,
       );
     }
 
@@ -108,7 +106,7 @@ class HighScoreScreen {
     const COL_RANK = 6;
     const COL_NAME = 18;
     const COL_SCORE = 10;
-    const COL_PROF = 14;
+    const _COL_PROF = 14;
 
     const headerLine =
       tag(colors.muted, '  ' + 'Rank'.padEnd(COL_RANK)) +
@@ -133,27 +131,23 @@ class HighScoreScreen {
         if (isHighlighted) {
           rows.push(
             '  ' +
-            boldColor(colors.highlight, rank) +
-            boldColor(colors.highlight, name) +
-            boldColor(colors.highlight, score) +
-            boldColor(colors.highlight, prof)
+              boldColor(colors.highlight, rank) +
+              boldColor(colors.highlight, name) +
+              boldColor(colors.highlight, score) +
+              boldColor(colors.highlight, prof),
           );
         } else {
           rows.push(
-            '  ' +
-            tag(colors.text, rank) +
-            tag(colors.text, name) +
-            tag(colors.text, score) +
-            tag(colors.text, prof)
+            '  ' + tag(colors.text, rank) + tag(colors.text, name) + tag(colors.text, score) + tag(colors.text, prof),
           );
         }
       } else {
         rows.push(
           '  ' +
-          tag(colors.muted, rank) +
-          tag(colors.muted, '---'.padEnd(COL_NAME)) +
-          tag(colors.muted, '---'.padStart(COL_SCORE)) +
-          tag(colors.muted, '    ---')
+            tag(colors.muted, rank) +
+            tag(colors.muted, '---'.padEnd(COL_NAME)) +
+            tag(colors.muted, '---'.padStart(COL_SCORE)) +
+            tag(colors.muted, '    ---'),
         );
       }
     }
@@ -186,7 +180,10 @@ class HighScoreScreen {
       tags: true,
       align: 'center',
       style: { fg: colors.muted, bg: colors.bg },
-      content: tag(colors.muted, 'Press ') + boldColor(colors.primary, 'ENTER') + tag(colors.muted, ' to return to the main menu'),
+      content:
+        tag(colors.muted, 'Press ') +
+        boldColor(colors.primary, 'ENTER') +
+        tag(colors.muted, ' to return to the main menu'),
     });
     this.addWidget(promptBox);
 

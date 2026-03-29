@@ -1,13 +1,12 @@
 #!/usr/bin/env node
-'use strict';
 
 // Gracefully handle uncaught exceptions — restore the terminal before crashing
 process.on('uncaughtException', (err) => {
   try {
     // Attempt to reset terminal to a sane state
     process.stdout.write('\x1b[?1049l'); // exit alt screen
-    process.stdout.write('\x1b[?25h');   // show cursor
-    process.stdout.write('\x1b[0m');     // reset colors
+    process.stdout.write('\x1b[?25h'); // show cursor
+    process.stdout.write('\x1b[0m'); // reset colors
   } catch (_) {
     // ignore write errors during cleanup
   }

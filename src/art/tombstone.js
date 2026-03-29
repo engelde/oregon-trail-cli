@@ -15,7 +15,8 @@ function tombstone(name, epitaph, date) {
     var words = text.split(' ');
     var lines = [];
     var current = '';
-    for (var i = 0; i < words.length; i++) {
+    var i;
+    for (i = 0; i < words.length; i++) {
       if (current && (current + ' ' + words[i]).length > maxWidth) {
         lines.push(current);
         current = words[i];
@@ -35,9 +36,7 @@ function tombstone(name, epitaph, date) {
   var blank = '      ' + pipe + ' '.repeat(innerWidth) + pipe;
 
   var epitaphLines = wrapText(epitaph, textWidth);
-  var epiRows = epitaphLines.map(function(line) {
-    return '      ' + pipe + ' ' + center(line, textWidth) + ' ' + pipe;
-  }).join('\n');
+  var epiRows = epitaphLines.map((line) => '      ' + pipe + ' ' + center(line, textWidth) + ' ' + pipe).join('\n');
 
   return [
     '         ' + W + '_____________' + WE,

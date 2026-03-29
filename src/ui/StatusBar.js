@@ -1,5 +1,3 @@
-'use strict';
-
 const blessed = require('blessed');
 const { colors, tag, bold } = require('./Theme');
 
@@ -34,11 +32,11 @@ class StatusBar {
    * @param {{ nextLandmarkName?: string, nextLandmarkDist?: number }} [extra]
    */
   update(gs, extra = {}) {
-    const date    = bold(tag(colors.secondary, gs.getDateString()));
+    const date = bold(tag(colors.secondary, gs.getDateString()));
     const weather = tag(colors.highlight, gs.weather || 'clear');
-    const health  = this._healthColor(gs.getHealthStatus());
-    const food    = tag(colors.text, `${gs.supplies.food} lbs`);
-    const miles   = tag(colors.text, `${gs.milesTraveled} mi`);
+    const health = this._healthColor(gs.getHealthStatus());
+    const food = tag(colors.text, `${gs.supplies.food} lbs`);
+    const miles = tag(colors.text, `${gs.milesTraveled} mi`);
 
     let landmark = '';
     if (extra.nextLandmarkName) {
@@ -47,13 +45,7 @@ class StatusBar {
     }
 
     const sep = tag(colors.muted, ' | ');
-    const parts = [
-      `Date: ${date}`,
-      `Weather: ${weather}`,
-      `Health: ${health}`,
-      `Food: ${food}`,
-      `Miles: ${miles}`,
-    ];
+    const parts = [`Date: ${date}`, `Weather: ${weather}`, `Health: ${health}`, `Food: ${food}`, `Miles: ${miles}`];
     if (landmark) parts.push(`Next: ${landmark}`);
 
     this.box.setContent(parts.join(sep));
@@ -63,11 +55,16 @@ class StatusBar {
   /** Map health string → colored tag */
   _healthColor(status) {
     switch (status) {
-      case 'good':      return tag('green', status);
-      case 'fair':      return tag('yellow', status);
-      case 'poor':      return tag('red', status);
-      case 'very poor': return tag('red', bold(status));
-      default:          return tag('gray', status);
+      case 'good':
+        return tag('green', status);
+      case 'fair':
+        return tag('yellow', status);
+      case 'poor':
+        return tag('red', status);
+      case 'very poor':
+        return tag('red', bold(status));
+      default:
+        return tag('gray', status);
     }
   }
 

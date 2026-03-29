@@ -1,7 +1,5 @@
-'use strict';
-
 const blessed = require('blessed');
-const { colors, tag, bold, boldColor } = require('../ui/Theme');
+const { colors, tag, boldColor } = require('../ui/Theme');
 const showDialog = require('../ui/DialogBox');
 
 // ── Title art with inline fallback ───────────────────────────────
@@ -12,38 +10,36 @@ try {
   titleWagon = art.titleWagon;
   subtitle = art.subtitle;
 } catch (_) {
-  titleArt = '{bold}{green-fg}' + [
-    "  ╔════════════════════════════════════════════════════════════════╗",
-    "  ║           _____ _            ___                              ║",
-    "  ║          |_   _| |__   ___  / _ \\ _ __ ___  __ _  ___  _ __  ║",
-    "  ║            | | | '_ \\ / _ \\| | | | '__/ _ \\/ _` |/ _ \\| '_ \\ ║",
-    "  ║            | | | | | |  __/| |_| | | |  __/ (_| | (_) | | | |║",
-    "  ║            |_| |_| |_|\\___| \\___/|_|  \\___|\\___, |\\___/|_| |_|║",
-    "  ║                                             |___/             ║",
-    "  ║                     _____ __   __  _  _                       ║",
-    "  ║                    |_   _|\\ \\ / / | |(_) _                   ║",
-    "  ║                      | |   \\ V /  | |  _| |                  ║",
-    "  ║                      | |    | |   | | | | |                  ║",
-    "  ║                      |_|    |_|   |_| |_|_|                  ║",
-    "  ╚════════════════════════════════════════════════════════════════╝",
-  ].join('\n') + '{/green-fg}{/bold}';
+  titleArt =
+    '{bold}{green-fg}' +
+    [
+      '  ╔════════════════════════════════════════════════════════════════╗',
+      '  ║           _____ _            ___                              ║',
+      '  ║          |_   _| |__   ___  / _ \\ _ __ ___  __ _  ___  _ __  ║',
+      "  ║            | | | '_ \\ / _ \\| | | | '__/ _ \\/ _` |/ _ \\| '_ \\ ║",
+      '  ║            | | | | | |  __/| |_| | | |  __/ (_| | (_) | | | |║',
+      '  ║            |_| |_| |_|\\___| \\___/|_|  \\___|\\___, |\\___/|_| |_|║',
+      '  ║                                             |___/             ║',
+      '  ║                     _____ __   __  _  _                       ║',
+      '  ║                    |_   _|\\ \\ / / | |(_) _                   ║',
+      '  ║                      | |   \\ V /  | |  _| |                  ║',
+      '  ║                      | |    | |   | | | | |                  ║',
+      '  ║                      |_|    |_|   |_| |_|_|                  ║',
+      '  ╚════════════════════════════════════════════════════════════════╝',
+    ].join('\n') +
+    '{/green-fg}{/bold}';
   titleWagon = '';
   subtitle = '{cyan-fg}A journey of 2,000 miles begins with a single step...{/cyan-fg}';
 }
 
-const MENU_ITEMS = [
-  'Travel the trail',
-  'Learn about the trail',
-  'See the top 10 list',
-  'Exit',
-];
+const MENU_ITEMS = ['Travel the trail', 'Learn about the trail', 'See the top 10 list', 'Exit'];
 
 class TitleScreen {
   constructor(screen, props) {
     this.screen = screen;
-    this.engine = (props && props.engine) || null;
-    this.gameState = (props && props.gameState) || null;
-    this.onComplete = (props && props.onComplete) || null;
+    this.engine = props?.engine || null;
+    this.gameState = props?.gameState || null;
+    this.onComplete = props?.onComplete || null;
     this.widgets = [];
     this.keyHandlers = [];
     this._dialog = null;
@@ -249,7 +245,9 @@ class TitleScreen {
       this.screen.unkey(keys, handler);
     });
     this.keyHandlers = [];
-    this.widgets.forEach(w => { w.detach(); });
+    this.widgets.forEach((w) => {
+      w.detach();
+    });
     this.widgets = [];
     this.screen.render();
   }

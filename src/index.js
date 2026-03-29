@@ -1,5 +1,3 @@
-'use strict';
-
 const blessed = require('blessed');
 const ScreenManager = require('./screens/ScreenManager');
 const GameEngine = require('./game/GameEngine');

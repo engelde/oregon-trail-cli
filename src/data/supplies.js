@@ -1,5 +1,3 @@
-'use strict';
-
 const supplies = {
   oxen: {
     name: 'Oxen',
@@ -14,7 +12,7 @@ const supplies = {
     name: 'Food',
     unit: 'pounds',
     unitSize: 1,
-    basePrice: 0.20,
+    basePrice: 0.2,
     description: 'Pounds of food',
     min: 0,
     max: 2000,
@@ -75,12 +73,12 @@ function getPriceMultiplier(landmarkIndex) {
   // Landmark indices with stores: 0 (Independence), 3 (Fort Kearney),
   // 5 (Fort Laramie), 9 (Fort Bridger), 11 (Fort Hall), 13 (Fort Boise)
   const multipliers = {
-    0: 1.0,    // Independence, MO
-    3: 1.25,   // Fort Kearney
-    5: 1.5,    // Fort Laramie
-    9: 2.0,    // Fort Bridger
-    11: 2.5,   // Fort Hall
-    13: 3.0,   // Fort Boise
+    0: 1.0, // Independence, MO
+    3: 1.25, // Fort Kearney
+    5: 1.5, // Fort Laramie
+    9: 2.0, // Fort Bridger
+    11: 2.5, // Fort Hall
+    13: 3.0, // Fort Boise
   };
 
   if (multipliers[landmarkIndex] !== undefined) {
@@ -88,7 +86,9 @@ function getPriceMultiplier(landmarkIndex) {
   }
 
   // Interpolate for any other index
-  const keys = Object.keys(multipliers).map(Number).sort((a, b) => a - b);
+  const keys = Object.keys(multipliers)
+    .map(Number)
+    .sort((a, b) => a - b);
   if (landmarkIndex <= keys[0]) return multipliers[keys[0]];
   if (landmarkIndex >= keys[keys.length - 1]) return multipliers[keys[keys.length - 1]];
 

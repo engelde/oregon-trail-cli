@@ -1,5 +1,3 @@
-'use strict';
-
 class WeatherSystem {
   constructor() {
     this.currentWeather = 'clear';
@@ -14,7 +12,7 @@ class WeatherSystem {
   update(month, terrain = 'plains') {
     const season = this._getSeason(month);
     const roll = Math.random();
-    const mountainBonus = (terrain === 'mountains') ? 0.15 : 0;
+    const mountainBonus = terrain === 'mountains' ? 0.15 : 0;
 
     // Tend to keep current weather for 1-2 days for realism
     if (this._consecutiveDays > 0 && Math.random() < 0.35) {
@@ -39,29 +37,29 @@ class WeatherSystem {
       else if (roll < 0.17) weather = 'heavy rain';
       else if (roll < 0.22) weather = 'thunderstorm';
       else if (roll < 0.27) weather = 'cloudy';
-      else if (roll < 0.30) weather = 'fog';
+      else if (roll < 0.3) weather = 'fog';
       else weather = 'clear';
     } else if (season === 'summer') {
       // July-August: hot, drought possible, thunderstorms
       if (roll < 0.25) weather = 'hot';
       else if (roll < 0.35) weather = 'thunderstorm';
-      else if (roll < 0.40) weather = 'rain';
+      else if (roll < 0.4) weather = 'rain';
       else if (roll < 0.48) weather = 'cloudy';
       else weather = 'clear';
     } else if (season === 'early_fall') {
       // September-October: cooling, rain, early snow in mountains
-      if (roll < 0.20) weather = 'rain';
-      else if (roll < 0.30) weather = 'heavy rain';
+      if (roll < 0.2) weather = 'rain';
+      else if (roll < 0.3) weather = 'heavy rain';
       else if (roll < 0.35 + mountainBonus) weather = 'snow';
-      else if (roll < 0.40 + mountainBonus) weather = 'blizzard';
+      else if (roll < 0.4 + mountainBonus) weather = 'blizzard';
       else if (roll < 0.48) weather = 'cloudy';
       else if (roll < 0.52) weather = 'fog';
       else weather = 'clear';
     } else {
       // November+: cold, snow, blizzards in mountains
-      if (roll < 0.20 + mountainBonus) weather = 'snow';
-      else if (roll < 0.30 + mountainBonus) weather = 'blizzard';
-      else if (roll < 0.40) weather = 'cloudy';
+      if (roll < 0.2 + mountainBonus) weather = 'snow';
+      else if (roll < 0.3 + mountainBonus) weather = 'blizzard';
+      else if (roll < 0.4) weather = 'cloudy';
       else if (roll < 0.48) weather = 'rain';
       else if (roll < 0.52) weather = 'fog';
       else weather = 'clear';
@@ -83,8 +81,18 @@ class WeatherSystem {
 
   _updateTemperature(month, terrain) {
     const baseTempByMonth = {
-      0: 25, 1: 30, 2: 42, 3: 52, 4: 63, 5: 73,
-      6: 82, 7: 80, 8: 70, 9: 55, 10: 40, 11: 28,
+      0: 25,
+      1: 30,
+      2: 42,
+      3: 52,
+      4: 63,
+      5: 73,
+      6: 82,
+      7: 80,
+      8: 70,
+      9: 55,
+      10: 40,
+      11: 28,
     };
 
     let temp = baseTempByMonth[month] || 60;
@@ -110,15 +118,15 @@ class WeatherSystem {
    */
   getSpeedModifier() {
     const modifiers = {
-      'clear': 1.0,
-      'cloudy': 1.0,
-      'hot': 0.85,
-      'fog': 0.4,
-      'rain': 0.75,
+      clear: 1.0,
+      cloudy: 1.0,
+      hot: 0.85,
+      fog: 0.4,
+      rain: 0.75,
       'heavy rain': 0.5,
-      'thunderstorm': 0.35,
-      'snow': 0.5,
-      'blizzard': 0.0,
+      thunderstorm: 0.35,
+      snow: 0.5,
+      blizzard: 0.0,
     };
     return modifiers[this.currentWeather] || 1.0;
   }
@@ -129,15 +137,15 @@ class WeatherSystem {
    */
   getHealthModifier() {
     const modifiers = {
-      'clear': 0.02,
-      'cloudy': 0,
-      'hot': -0.03,
-      'fog': -0.01,
-      'rain': -0.02,
+      clear: 0.02,
+      cloudy: 0,
+      hot: -0.03,
+      fog: -0.01,
+      rain: -0.02,
       'heavy rain': -0.04,
-      'thunderstorm': -0.03,
-      'snow': -0.05,
-      'blizzard': -0.10,
+      thunderstorm: -0.03,
+      snow: -0.05,
+      blizzard: -0.1,
     };
     let mod = modifiers[this.currentWeather] || 0;
 
@@ -155,15 +163,15 @@ class WeatherSystem {
    */
   getWeatherIcon() {
     const icons = {
-      'clear': '☀',
-      'cloudy': '☁',
-      'hot': '☀🔥',
-      'fog': '🌫',
-      'rain': '🌧',
+      clear: '☀',
+      cloudy: '☁',
+      hot: '☀🔥',
+      fog: '🌫',
+      rain: '🌧',
       'heavy rain': '⛈',
-      'thunderstorm': '⚡',
-      'snow': '❄',
-      'blizzard': '❄❄',
+      thunderstorm: '⚡',
+      snow: '❄',
+      blizzard: '❄❄',
     };
     return icons[this.currentWeather] || '?';
   }

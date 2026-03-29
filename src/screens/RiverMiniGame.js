@@ -1,46 +1,46 @@
-'use strict';
-
 const blessed = require('blessed');
-const { colors, tag, bold, boldColor } = require('../ui/Theme');
+const { colors, tag, boldColor } = require('../ui/Theme');
 
 // ── Rock definitions ──────────────────────────────────────────
 
 const ROCKS = {
   small: {
     name: 'small',
-    width: 4, height: 2,
+    width: 4,
+    height: 2,
     art: [' /\\', '/__\\'],
-    damageMin: 5, damageMax: 10,
+    damageMin: 5,
+    damageMax: 10,
     spawnWeight: 0.5,
   },
   medium: {
     name: 'medium',
-    width: 6, height: 3,
+    width: 6,
+    height: 3,
     art: ['  /\\', ' /  \\', '/____\\'],
-    damageMin: 10, damageMax: 20,
+    damageMin: 10,
+    damageMax: 20,
     spawnWeight: 0.35,
   },
   large: {
     name: 'large',
-    width: 8, height: 4,
+    width: 8,
+    height: 4,
     art: ['   /\\', '  /  \\', ' / /\\ \\', '/______\\'],
-    damageMin: 20, damageMax: 30,
+    damageMin: 20,
+    damageMax: 30,
     spawnWeight: 0.15,
   },
 };
 
-const RAFT_ART = [
-  ' ╔══╗ ',
-  ' ║▓▓║ ',
-  ' ╚══╝ ',
-];
+const RAFT_ART = [' ╔══╗ ', ' ║▓▓║ ', ' ╚══╝ '];
 const RAFT_WIDTH = 7;
 const RAFT_HEIGHT = 3;
 
 const TICK_MS = 100;
-const ROCK_SPEED = 2;          // chars per tick (fractional accumulation)
+const ROCK_SPEED = 2; // chars per tick (fractional accumulation)
 const SPAWN_INTERVAL_MS = 800;
-const RIVER_DURATION_S = 18;   // seconds to cross
+const _RIVER_DURATION_S = 18; // seconds to cross
 const COLLISION_COOLDOWN = 500; // ms between hits
 const FLASH_DURATION_MS = 800;
 
@@ -100,9 +100,9 @@ class RiverMiniGame {
   }
 
   destroy() {
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.keyHandlers.forEach(({ keys, handler }) => this.screen.unkey(keys, handler));
-    this.widgets.forEach(w => w.detach());
+    this.widgets.forEach((w) => w.detach());
     this.widgets = [];
     this.keyHandlers = [];
     this.intervals = [];
@@ -169,7 +169,8 @@ class RiverMiniGame {
     const cy = Math.floor(this.height / 2);
     if (cy >= 0 && cy < lines.length) {
       const line = lines[cy];
-      lines[cy] = line.substring(0, cx) + `{bold}{white-fg}${text}{/white-fg}{/bold}` + line.substring(cx + text.length);
+      lines[cy] =
+        line.substring(0, cx) + `{bold}{white-fg}${text}{/white-fg}{/bold}` + line.substring(cx + text.length);
     }
     this.gameArea.setContent(lines.join('\n'));
     this.updateStatus();
@@ -205,7 +206,7 @@ class RiverMiniGame {
     }
 
     // Remove off-screen rocks
-    this.rocks = this.rocks.filter(r => r.x + r.def.width > -2);
+    this.rocks = this.rocks.filter((r) => r.x + r.def.width > -2);
 
     // Spawn rocks
     this.spawnAccum += TICK_MS;
@@ -218,7 +219,7 @@ class RiverMiniGame {
     this.checkCollisions(now);
 
     // Expire flash messages
-    this.flashMessages = this.flashMessages.filter(f => now < f.expire);
+    this.flashMessages = this.flashMessages.filter((f) => now < f.expire);
 
     // Check completion
     if (this.distanceTraveled >= this.distanceTotal) {
@@ -334,7 +335,7 @@ class RiverMiniGame {
     this.addFlash(
       `{yellow-fg}CRASH! -${damagePercent}% ${label}{/yellow-fg}`,
       this.raftX + RAFT_WIDTH + 1,
-      this.raftY + 1
+      this.raftY + 1,
     );
 
     // Remove the rock on collision
@@ -378,9 +379,7 @@ class RiverMiniGame {
     ];
     const pat = patterns[row % 2];
     const chunk = pat.substring(0, w).padEnd(w);
-    return row % 2 === 0
-      ? `{green-fg}${chunk}{/green-fg}`
-      : `{yellow-fg}${chunk}{/yellow-fg}`;
+    return row % 2 === 0 ? `{green-fg}${chunk}{/green-fg}` : `{yellow-fg}${chunk}{/yellow-fg}`;
   }
 
   buildWaterLine(w, row) {
@@ -499,21 +498,18 @@ class RiverMiniGame {
 
   updateStatus() {
     const pct = Math.min(100, Math.floor((this.distanceTraveled / this.distanceTotal) * 100));
-    const remaining = Math.max(0, 100 - pct);
+    const _remaining = Math.max(0, 100 - pct);
     const sep = tag(colors.muted, ' │ ');
 
     // Build a mini progress bar
     const barLen = 15;
     const filled = Math.floor((pct / 100) * barLen);
-    const bar = '{green-fg}' + '█'.repeat(filled) + '{/green-fg}'
-              + '{muted}' + '░'.repeat(barLen - filled) + '{/muted}';
+    const bar =
+      '{green-fg}' + '█'.repeat(filled) + '{/green-fg}' + '{muted}' + '░'.repeat(barLen - filled) + '{/muted}';
 
     const intactColor = this.suppliesIntact > 60 ? 'green' : this.suppliesIntact > 30 ? 'yellow' : 'red';
 
-    const parts = [
-      `Crossing: ${bar} ${pct}%`,
-      `Supplies: ${boldColor(intactColor, `${this.suppliesIntact}%`)}`,
-    ];
+    const parts = [`Crossing: ${bar} ${pct}%`, `Supplies: ${boldColor(intactColor, `${this.suppliesIntact}%`)}`];
 
     if (this.injuries.length > 0) {
       parts.push(`Injured: ${tag('red', this.injuries.join(', '))}`);
@@ -528,7 +524,7 @@ class RiverMiniGame {
     if (this.phase === 'results') return;
     this.phase = 'results';
 
-    this.intervals.forEach(i => clearInterval(i));
+    this.intervals.forEach((i) => clearInterval(i));
     this.intervals = [];
 
     // Apply supply losses to game state
@@ -564,15 +560,14 @@ class RiverMiniGame {
       );
       for (const [key, amount] of Object.entries(this.suppliesLost)) {
         const label = key.charAt(0).toUpperCase() + key.slice(1);
-        lines.push(`║  Lost ${label}: ${String(-amount).replace('-', '')}${' '.repeat(Math.max(1, 24 - label.length - String(amount).length))}║`);
+        lines.push(
+          `║  Lost ${label}: ${String(-amount).replace('-', '')}${' '.repeat(Math.max(1, 24 - label.length - String(amount).length))}║`,
+        );
       }
       if (this.injuries.length > 0) {
         lines.push(`║  Injured: ${this.injuries.join(', ').padEnd(26)}║`);
       }
-      lines.push(
-        '║                                      ║',
-        '╚══════════════════════════════════════╝',
-      );
+      lines.push('║                                      ║', '╚══════════════════════════════════════╝');
     } else {
       lines.push(
         '╔══════════════════════════════════════╗',
