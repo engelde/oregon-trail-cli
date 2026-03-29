@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/engelde/oregon-trail-cli/compare/v1.0.1...v1.0.2) (2026-03-29)
+
+
+### Bug Fixes
+
+* remove --provenance flag for private repo npm publish ([ed92fcb](https://github.com/engelde/oregon-trail-cli/commit/ed92fcbb3a68b4fd0e61e57bf3b305e7afb70720))
+* remove --provenance flag for private repo npm publish ([9f23e1a](https://github.com/engelde/oregon-trail-cli/commit/9f23e1ad06589d1e5c6de74e69f48ad7e93eb140))
+
 ## [1.0.1](https://github.com/engelde/oregon-trail-cli/compare/v1.0.0...v1.0.1) (2026-03-29)
 
 
