@@ -53,10 +53,12 @@ class TitleScreen {
     const showWagon = sh >= 38 && titleWagon;
 
     // ── ASCII Art Title (combined OREGON TRAIL) ─────────────────
+    const sw = this.screen.width;
+    const contentWidth = Math.min(68, sw - 2);
     const artBox = blessed.box({
       top: 0,
       left: 'center',
-      width: '90%',
+      width: contentWidth,
       height: 7,
       content: titleArt,
       tags: true,
@@ -71,7 +73,7 @@ class TitleScreen {
       const wagonBox = blessed.box({
         top: nextRow,
         left: 'center',
-        width: '90%',
+        width: contentWidth,
         height: 17,
         content: titleWagon,
         tags: true,
