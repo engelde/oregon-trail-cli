@@ -26,7 +26,7 @@ A faithful CLI recreation of the classic 1990 MECC Oregon Trail, built in Node.j
 - 🤒 Health system: dysentery, cholera, typhoid, measles, snakebite
 - 💼 Profession choice affects starting money and final score multiplier
 - 🏆 High score board saved locally
-- 💚 Retro green-on-black terminal aesthetic with color
+- 💚 Retro terminal aesthetic with color
 
 ## Quick Start
 
@@ -38,16 +38,16 @@ npx oregon-trail-cli
 
 ```bash
 npm install -g oregon-trail-cli
-node bin/oregon-trail.js
+oregon-trail
 ```
 
 ### Or clone and run
 
 ```bash
-git clone https://github.com/yourusername/oregon-trail-cli.git
+git clone https://github.com/engelde/oregon-trail-cli.git
 cd oregon-trail-cli
 npm install
-node bin/oregon-trail.js
+npm start
 ```
 
 ## Requirements
@@ -73,6 +73,36 @@ node bin/oregon-trail.js
 - **Watch your food supply** — hunt to supplement when running low.
 - **Filling rations** keep your party healthier on the trail.
 - **Don't push grueling pace** too long — your party's health will suffer.
+
+## Development
+
+```bash
+git clone https://github.com/engelde/oregon-trail-cli.git
+cd oregon-trail-cli
+npm install
+```
+
+### Scripts
+
+| Command | Description |
+|---|---|
+| `npm start` | Run the game |
+| `npm test` | Run tests (99 tests) |
+| `npm run lint` | Lint with Biome |
+| `npm run lint:fix` | Auto-fix lint issues |
+| `npm run format` | Format with Biome |
+
+### Git Hooks
+
+This project uses [Husky](https://typicode.github.io/husky/) with:
+
+- **pre-commit** — runs linting and tests
+- **commit-msg** — enforces [Conventional Commits](https://www.conventionalcommits.org/) via commitlint
+
+### CI/CD
+
+- **CI** — lint + tests on Node 18/20/22 for every push and PR
+- **Releases** — automated via [release-please](https://github.com/googleapis/release-please) with semantic versioning
 
 ## Credits
 

@@ -12,7 +12,8 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "test": "node --test 'test/*.test.js'"
+    "test": "node --test 'test/*.test.js'",
+    "prepare": "husky"
   },
   "keywords": [
     "oregon-trail",
@@ -23,8 +24,16 @@
     "terminal",
     "adventure"
   ],
-  "author": "",
+  "author": "David Engel",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/engelde/oregon-trail-cli.git"
+  },
+  "homepage": "https://github.com/engelde/oregon-trail-cli#readme",
+  "bugs": {
+    "url": "https://github.com/engelde/oregon-trail-cli/issues"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
@@ -32,6 +41,9 @@
     "blessed": "^0.1.81"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.9"
+    "@biomejs/biome": "2.4.9",
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "husky": "^9.1.7"
   }
 }
