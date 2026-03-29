@@ -1,16 +1,10 @@
-const titleArt = `
-{bold}{green-fg}  ╔╦╗╦ ╦╔═╗                                                        {/green-fg}{/bold}
-{bold}{green-fg}   ║ ╠═╣║╣                                                         {/green-fg}{/bold}
-{bold}{green-fg}   ╩ ╩ ╩╚═╝                                                        {/green-fg}{/bold}
-{bold}{yellow-fg}  ╔═══╗ ╔═══╗ ╔═══╗ ╔═══╗ ╔═══╗ ╔═╗ ╔╗                            {/yellow-fg}{/bold}
-{bold}{yellow-fg}  ║   ║ ║   ║ ║     ║     ║   ║ ║ ╚═╣ ║                            {/yellow-fg}{/bold}
-{bold}{yellow-fg}  ║   ║ ╠═╦═╝ ╠═══  ║  ╔╗ ║   ║ ║   ║ ║                            {/yellow-fg}{/bold}
-{bold}{yellow-fg}  ║   ║ ║ ║   ║     ║  ╚╝ ║   ║ ║   ║ ║                            {/yellow-fg}{/bold}
-{bold}{yellow-fg}  ╚═══╝ ╩ ╚═  ╚═══╝ ╚═══╝ ╚═══╝ ╩   ╩ ╚═══╝                      {/yellow-fg}{/bold}
-{bold}{green-fg}          ╔╦╗╔═══╗ ╔═══╗ ╦ ╦                                        {/green-fg}{/bold}
-{bold}{green-fg}           ║ ║   ║ ╠═══╣ ║ ║                                        {/green-fg}{/bold}
-{bold}{green-fg}           ╩ ║   ║ ║   ║ ║ ║                                        {/green-fg}{/bold}
-{bold}{green-fg}           ╩ ╚═══╝ ╩   ╩ ╩ ╚═══╝                                    {/green-fg}{/bold}`;
+const titleArt =
+  '{bold}{cyan-fg}                         ─── T H E ───{/cyan-fg}{/bold}\n' +
+  '{bold}{yellow-fg}  ╔═══╗ ╔═══╗ ╔═══╗ ╔═══╗ ╔═══╗ ╔╗  ╔╗{/yellow-fg}   {green-fg}╔╦╗ ╔═══╗ ╔═══╗ ╦  ╦{/green-fg}{/bold}\n' +
+  '{bold}{yellow-fg}  ║   ║ ║   ║ ║     ║     ║   ║ ║╚╗ ║║{/yellow-fg}   {green-fg} ║  ║   ║ ║   ║ ║  ║{/green-fg}{/bold}\n' +
+  '{bold}{yellow-fg}  ║   ║ ╠══╦╝ ╠═══  ║ ╔═╗ ║   ║ ║ ╚╗║║{/yellow-fg}   {green-fg} ║  ╠══╦╝ ╠═══╣ ║  ║{/green-fg}{/bold}\n' +
+  '{bold}{yellow-fg}  ║   ║ ║  ╚╗ ║     ║ ╚═╝ ║   ║ ║  ╚╝║{/yellow-fg}   {green-fg} ║  ║  ╚╗ ║   ║ ║  ║{/green-fg}{/bold}\n' +
+  '{bold}{yellow-fg}  ╚═══╝ ╩   ╩ ╚═══╝ ╚═══╝ ╚═══╝ ╩    ╩{/yellow-fg}   {green-fg} ╩  ╩   ╩ ╩   ╩ ╩  ╚═══╝{/green-fg}{/bold}';
 
 const titleWagon = `
 {yellow-fg}                          . ' .                                       {/yellow-fg}
