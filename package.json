@@ -1,0 +1,31 @@
+{
+  "name": "oregon-trail-cli",
+  "version": "1.0.0",
+  "description": "A retro CLI version of the classic Oregon Trail game with ASCII art, animations, and interactive mini-games",
+  "main": "src/index.js",
+  "bin": {
+    "oregon-trail": "./bin/oregon-trail.js",
+    "oregon-trail-cli": "./bin/oregon-trail.js"
+  },
+  "scripts": {
+    "start": "node bin/oregon-trail.js",
+    "test": "node --test test/"
+  },
+  "keywords": [
+    "oregon-trail",
+    "cli",
+    "game",
+    "retro",
+    "ascii",
+    "terminal",
+    "adventure"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81"
+  }
+}
