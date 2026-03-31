@@ -112,7 +112,9 @@ function showDialog(screen, opts) {
     }
   }
 
-  screen.on('keypress', onKeypress);
+  // Defer listener registration so the keypress that opened
+  // this dialog does not immediately trigger the handler.
+  process.nextTick(() => screen.on('keypress', onKeypress));
 
   function teardown() {
     screen.removeListener('keypress', onKeypress);
