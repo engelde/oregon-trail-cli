@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/engelde/oregon-trail-cli/compare/v1.0.2...v1.0.3) (2026-03-31)
+
+
+### Bug Fixes
+
+* defer dialog keypress listener to prevent same-event firing ([ea7249e](https://github.com/engelde/oregon-trail-cli/commit/ea7249ee4d9dcd625ba636e9dddde550be15f535))
+* defer dialog keypress listener to prevent same-event firing ([297929d](https://github.com/engelde/oregon-trail-cli/commit/297929d5f01b6d0e39a4dd290d06f656affc890a))
+
 ## [1.0.2](https://github.com/engelde/oregon-trail-cli/compare/v1.0.1...v1.0.2) (2026-03-29)
 
 
