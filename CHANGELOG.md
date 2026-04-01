@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4](https://github.com/engelde/oregon-trail-cli/compare/v1.0.3...v1.0.4) (2026-04-01)
+
+
+### Bug Fixes
+
+* improve N and G letter rendering in title art ([d1901c9](https://github.com/engelde/oregon-trail-cli/commit/d1901c9d5cc2419c6c82f7ad429d4cda1c9ebe31))
+* improve N and G letter rendering in title art ([f267eec](https://github.com/engelde/oregon-trail-cli/commit/f267eece4751728ab6684c58526b819653f26a80))
+
 ## [1.0.3](https://github.com/engelde/oregon-trail-cli/compare/v1.0.2...v1.0.3) (2026-03-31)
 
 
